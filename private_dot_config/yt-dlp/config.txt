@@ -1,0 +1,30 @@
+
+--sub-langs 'en.*,ru,ja'
+
+# Download and convert subs
+--write-subs
+--convert-subs ass
+
+--no-mtime
+
+# Use mkv video extension
+--merge-output-format mp4
+
+# Download the best video available but no better than 1080p,
+# or the worst video if there is no video under 1080p
+-f "bv*[height<=1080]+ba/b[height<=1080] / wv*+ba/w,ba"
+
+# Embed subs, thumbnail, and chapters
+#--embed-subs
+#--embed-thumbnail
+--embed-metadata
+--embed-chapters
+
+# Remove sponsor chapter
+--sponsorblock-remove 'sponsor'
+
+# Save all videos under YouTube directory
+-o '/run/media/andrea/X210 SSD/media/YouTube/%(title)s.%(ext)s'
+
+--user-agent "Mozilla/5.0 (Windows NT 10.0; rv:94.0) Gecko/20100101 Firefox/94.0"
+--geo-bypass
