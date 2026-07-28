@@ -1,0 +1,43 @@
+/* Add padding and a horizontal bar between each entry for readability */
+.mdict {
+  border-top: 0.15em solid #c4c4c4;
+  margin-bottom: 0.5em;
+  padding-top: 0.5em;
+}
+
+.gddictname {
+  position: relative;
+  z-index: 9;
+  margin-bottom: -0.16em;
+}
+
+img {
+  max-width: 100%;
+  width: auto;
+}
+
+a[href^="gdlookup"]:link {
+  color: #5066d4;
+  text-decoration: none;
+}
+a[href^="gdlookup"]:hover,
+a[href^="gdlookup"]:focus,
+a[href^="gdlookup"]:active {
+  color: #e4671b;
+}
+
+/* Remove duplicate headers in EPWing dictionaries. */
+.epwing_article h3 {
+  display: none;
+}
+
+.epwing_text:first-line {
+  text-indent: -1em;
+}
+
+.epwing_text {
+  padding-top: 0.5em;
+  padding-left: 1em;
+  border-top: 0.15em solid #c4c4c4;
+  margin-bottom: 0.5em;
+}

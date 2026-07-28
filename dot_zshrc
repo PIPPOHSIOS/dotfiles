@@ -1,0 +1,234 @@
+#  ╔═╗╔═╗╦ ╦╦═╗╔═╗  ╔═╗╔═╗╔╗╔╔═╗╦╔═╗	- z0mbi3
+#  ╔═╝╚═╗╠═╣╠╦╝║    ║  ║ ║║║║╠╣ ║║ ╦	- https://github.com/gh0stzk/dotfiles
+#  ╚═╝╚═╝╩ ╩╩╚═╚═╝  ╚═╝╚═╝╝╚╝╚  ╩╚═╝	- My zsh conf
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+#  ┬  ┬┌─┐┬─┐┌─┐
+#  └┐┌┘├─┤├┬┘└─┐
+#   └┘ ┴ ┴┴└─└─┘
+export VISUAL="${EDITOR}"
+export EDITOR='nvim'
+export BROWSER='librewolf'
+export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
+export BAT_THEME="base16"
+
+if [ -d "$HOME/.local/bin" ] ;
+  then PATH="$HOME/.local/bin:$PATH"
+fi
+export PATH="/usr/local/bin:$PATH"
+
+# Compiler
+export CC=gcc
+export CXX=g++
+
+# Speed up compile times
+# https://wiki.archlinux.org/index.php/Makepkg#Creating_optimized_packages
+MAKEFLAGS="-j$(($(nproc) + 1)) -l$(nproc)"; export MAKEFLAGS
+export CFLAGS="-Wall -Wextra -Wpedantic -Wconversion -Wshadow -march=native -O2 -pipe -fstack-protector-strong -fno-plt"
+export CXXFLAGS="$CFLAGS"
+
+
+#  ┬  ┌─┐┌─┐┌┬┐  ┌─┐┌┐┌┌─┐┬┌┐┌┌─┐
+#  │  │ │├─┤ ││  ├┤ ││││ ┬││││├┤
+#  ┴─┘└─┘┴ ┴─┴┘  └─┘┘└┘└─┘┴┘└┘└─┘
+autoload -Uz compinit
+
+for dump in ~/.config/zsh/zcompdump(N.mh+24); do
+  compinit -d ~/.config/zsh/zcompdump
+done
+
+compinit -C -d ~/.config/zsh/zcompdump
+
+autoload -Uz add-zsh-hook
+autoload -Uz vcs_info
+precmd () { vcs_info }
+_comp_options+=(globdots)
+
+zstyle ':completion:*' verbose true
+zstyle ':completion:*:*:*:*:*' menu select
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS} 'ma=48;5;197;1'
+zstyle ':completion:*' matcher-list \
+		'm:{a-zA-Z}={A-Za-z}' \
+		'+r:|[._-]=* r:|=*' \
+		'+l:|=*'
+zstyle ':completion:*:warnings' format "%B%F{red}No matches for:%f %F{magenta}%d%b"
+zstyle ':completion:*:descriptions' format '%F{yellow}[-- %d --]%f'
+zstyle ':vcs_info:*' formats ' %B%s-[%F{magenta}%f %F{yellow}%b%f]-'
+
+#  ┬ ┬┬┌─┐┌┬┐┌─┐┬─┐┬ ┬
+#  ├─┤│└─┐ │ │ │├┬┘└┬┘
+#  ┴ ┴┴└─┘ ┴ └─┘┴└─ ┴
+HISTFILE=~/.config/zsh/zhistory
+HISTSIZE=5000
+SAVEHIST=5000
+HISTDUP=erase
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+
+#  ┌─┐┌─┐┬ ┬  ┌─┐┌─┐┌─┐┬    ┌─┐┌─┐┌┬┐┬┌─┐┌┐┌┌─┐
+#  ┌─┘└─┐├─┤  │  │ ││ ││    │ │├─┘ │ ││ ││││└─┐
+#  └─┘└─┘┴ ┴  └─┘└─┘└─┘┴─┘  └─┘┴   ┴ ┴└─┘┘└┘└─┘
+setopt AUTOCD              # change directory just by typing its name
+setopt PROMPT_SUBST        # enable command substitution in prompt
+setopt MENU_COMPLETE       # Automatically highlight first element of completion menu
+setopt LIST_PACKED		   # The completion menu takes less space.
+setopt AUTO_LIST           # Automatically list choices on ambiguous completion.
+setopt COMPLETE_IN_WORD    # Complete from both ends of a word.
+
+#  ┌┬┐┬ ┬┌─┐  ┌─┐┬─┐┌─┐┌┬┐┌─┐┌┬┐
+#   │ ├─┤├┤   ├─┘├┬┘│ ││││├─┘ │
+#   ┴ ┴ ┴└─┘  ┴  ┴└─└─┘┴ ┴┴   ┴
+function dir_icon {
+  if [[ "$PWD" == "$HOME" ]]; then
+    echo "%B%F{cyan}%f%b"
+  else
+    echo "%B%F{cyan}%f%b"
+  fi
+}
+
+# PS1='%B%F{blue}%f%b  %B%F{magenta}%n%f%b $(dir_icon)  %B%F{red}%~%f%b${vcs_info_msg_0_} %(?.%B%F{green}.%F{red})%f%b '
+PS1='%B%F{magenta}%n%f%b $(dir_icon)  %B%F{red}%~%f%b${vcs_info_msg_0_} %(?.%B%F{green}.%F{red})%f%b '
+
+#  ┌─┐┬  ┬ ┬┌─┐┬┌┐┌┌─┐
+#  ├─┘│  │ ││ ┬││││└─┐
+#  ┴  ┴─┘└─┘└─┘┴┘└┘└─┘
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+source /usr/share/zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+bindkey '^[[3~' delete-char
+source $HOME/.config/zsh/key-bindings.zsh
+
+#  ┌─┐┬ ┬┌─┐┌┐┌┌─┐┌─┐  ┌┬┐┌─┐┬─┐┌┬┐┬┌┐┌┌─┐┬  ┌─┐  ┌┬┐┬┌┬┐┬  ┌─┐
+#  │  ├─┤├─┤││││ ┬├┤    │ ├┤ ├┬┘│││││││├─┤│  └─┐   │ │ │ │  ├┤
+#  └─┘┴ ┴┴ ┴┘└┘└─┘└─┘   ┴ └─┘┴└─┴ ┴┴┘└┘┴ ┴┴─┘└─┘   ┴ ┴ ┴ ┴─┘└─┘
+function xterm_title_precmd () {
+	print -Pn -- '\e]2;%n@%m %~\a'
+	[[ "$TERM" == 'screen'* ]] && print -Pn -- '\e_\005{g}%n\005{-}@\005{m}%m\005{-} \005{B}%~\005{-}\e\\'
+}
+
+function xterm_title_preexec () {
+	print -Pn -- '\e]2;%n@%m %~ %# ' && print -n -- "${(q)1}\a"
+	[[ "$TERM" == 'screen'* ]] && { print -Pn -- '\e_\005{g}%n\005{-}@\005{m}%m\005{-} \005{B}%~\005{-} %# ' && print -n -- "${(q)1}\e\\"; }
+}
+
+if [[ "$TERM" == (kitty*|alacritty*|tmux*|screen*|xterm*) ]]; then
+	add-zsh-hook -Uz precmd xterm_title_precmd
+	add-zsh-hook -Uz preexec xterm_title_preexec
+fi
+
+#  ┌─┐┬  ┬┌─┐┌─┐
+#  ├─┤│  │├─┤└─┐
+#  ┴ ┴┴─┘┴┴ ┴└─┘
+
+# Use neovim for vim if present.
+[ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
+
+# Verbosity and settings that you pretty much just always are going to want.
+alias \
+	cp="cp -iv" \
+	mv="mv -iv" \
+	rm="rm -vI" \
+	bc="bc -ql" \
+	rsync="rsync -vrPlu" \
+	mkd="mkdir -pv" \
+	ffmpeg="ffmpeg -hide_banner" \
+	:q="exit" \
+	help="man" \
+	chd='cd -- "$(choose_from_cwds)" && ls -a' \
+	rclone="rclone -v" \
+
+# Remove subtitle lines repetition from youtube automatic subs
+convertautosubs() {
+    for lang in "en" "ru" "ja"; do
+        fn=$(echo "$1" | sed "s/%(ext)s/$lang.srt/g")
+        ffmpeg -fix_sub_duration -i "$fn" -c:s text "$fn".tmp.srt
+        mv "$fn".tmp.srt "$fn"
+    done
+}
+
+# Youtube
+alias \
+	yt="yt-dlp -i" \
+  ytautosubs="yt --write-auto-subs --use-postprocessor srt_fix" \
+	yta="yt -x -f bestaudio/best" \
+	mp3dl="yta --audio-quality 1 --audio-format mp3" \
+	ytv="youtube-viewer" \
+	ytt="yt --skip-download --write-thumbnail" \
+	ytw="yt --merge-output-format webm -f 'bestvideo[ext=webm]+bestaudio/best[ext=webm]'" \
+	# ytautosubs="yt --write-auto-subs --sub-format srt \
+	#    --exec 'before_dl:for lang in \"en\" \"ru\" \"ja\"; \
+	#    do fn=\$(echo \"%(_filename)s\"| sed \"s/%(ext)s/\$lang.srt/g\") && \
+	#    ffmpeg -fix_sub_duration -i \"\$fn\" -c:s text \"\$fn\".tmp.srt && \
+	#    mv \"\$fn\".tmp.srt \"\$fn\" ; done' --sub-langs 'ru'" \
+
+# Colorize commands when possible.
+alias \
+	ls="eza --icons=always --color=always -a" \
+	ll="eza --icons=always --color=always -la" \
+	grep="grep --color=auto" \
+	ggrep="grep --exclude-dir='.git' --exclude-dir='.mypy_cache'" \
+	diff="diff --color=auto" \
+	less="less -R" \
+	ccat="highlight --out-format=ansi" \
+	ip="ip -color=auto" \
+
+# Journal
+alias \
+	journal="journalctl --since '3 day ago'" \
+	errors="journalctl -p err..alert -b -e" \
+
+# Applications
+alias music="ncmpcpp"
+# Change directory
+# alias subs='cd -- "/mnt/archive/langs/Japanese/kitsunekko-mirror/subtitles/"'
+# Condense audio
+alias audiocond='subs2cia condense -ae opus --no-gen-subtitle -p 100'
+# Ctrl+O to launch lf file manager.
+bindkey -s '^o' '^ulf\n'
+# Ctrl+F to search directory with fzf.
+bindkey -s '^f' '^ucd -- "$(dirname -- "$(fzf)")"\n'
+
+# Pacman/System
+
+# Uninstall all packages no longer required as dependencies (orphans)
+remorphans() {
+	local packages=()
+
+	for package in $(pacman -Qdtq); do
+		packages+=("$package")
+	done
+
+	echo "Found ${#packages[*]} orphans."
+	if ! [[ ${#packages[*]} -eq 0 ]]; then
+		sudo pacman -Rns "${packages[@]}"
+	fi
+}
+
+alias \
+	paclist="pacman -Qett --color=always | less" \
+	trimlogs='sudo journalctl --vacuum-size=150M' \
+	pacclean="remorphans && sudo pacman -Sc && trimlogs" \
+	whathaveidone="tail -500 /var/log/pacman.log | grep -i 'installed\|removed\|graded' --color=never" \
+	refl='sudo reflector --protocol https --download-timeout 60 --verbose --age 6 --latest 100 --fastest 10 --sort rate --country "$(curl -Ls "ifconfig.co/country")" --save /etc/pacman.d/mirrorlist' \
+  mirrors='refl' \
+  pacupdate='sudo pacman -Syu'
+
+
+## [Completion]
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /home/andrea/.dart-cli-completion/zsh-config.zsh ]] && . /home/andrea/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+
+fpath+=~/.zfunc; autoload -Uz compinit; compinit
+eval "$(zoxide init zsh)"
