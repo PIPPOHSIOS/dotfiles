@@ -1,0 +1,42 @@
+{
+  "Devices": {},
+  "MetadataOptions": {
+    "author": true,
+    "authourSort": true,
+    "description": true,
+    "descriptionTemplate": "",
+    "descriptionUseTemplate": false,
+    "isbn": true,
+    "language": true,
+    "mark_not_interested": false,
+    "published_date": true,
+    "publisher": true,
+    "rating": true,
+    "readingStatus": -1,
+    "reading_direction": "default",
+    "resetPosition": false,
+    "series": true,
+    "setRreadingStatus": false,
+    "set_reading_direction": true,
+    "set_sync_date": true,
+    "subtitle": true,
+    "subtitleTemplate": "",
+    "sync_date_library_date": "timestamp",
+    "title": true,
+    "titleSort": true,
+    "update_KoboEpubs": true,
+    "usePlugboard": true
+  },
+  "backupOptionsStore": {
+    "backupCopiesToKeepSpin": 5,
+    "backupDestDirectory": "",
+    "backupEachCOnnection": false,
+    "backupZipDatabase": true,
+    "doDailyBackp": false
+  },
+  "commonOptionsStore": {
+    "buttonActionDevice": "",
+    "buttonActionLibrary": "",
+    "individualDeviceOptions": false
+  }
+}

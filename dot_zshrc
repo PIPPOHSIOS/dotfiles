@@ -5,31 +5,6 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-#  ┬  ┬┌─┐┬─┐┌─┐
-#  └┐┌┘├─┤├┬┘└─┐
-#   └┘ ┴ ┴┴└─└─┘
-export VISUAL="${EDITOR}"
-export EDITOR='nvim'
-export BROWSER='librewolf'
-export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
-export BAT_THEME="base16"
-
-if [ -d "$HOME/.local/bin" ] ;
-  then PATH="$HOME/.local/bin:$PATH"
-fi
-export PATH="/usr/local/bin:$PATH"
-
-# Compiler
-export CC=gcc
-export CXX=g++
-
-# Speed up compile times
-# https://wiki.archlinux.org/index.php/Makepkg#Creating_optimized_packages
-MAKEFLAGS="-j$(($(nproc) + 1)) -l$(nproc)"; export MAKEFLAGS
-export CFLAGS="-Wall -Wextra -Wpedantic -Wconversion -Wshadow -march=native -O2 -pipe -fstack-protector-strong -fno-plt"
-export CXXFLAGS="$CFLAGS"
-
-
 #  ┬  ┌─┐┌─┐┌┬┐  ┌─┐┌┐┌┌─┐┬┌┐┌┌─┐
 #  │  │ │├─┤ ││  ├┤ ││││ ┬││││├┤
 #  ┴─┘└─┘┴ ┴─┴┘  └─┘┘└┘└─┘┴┘└┘└─┘
@@ -102,7 +77,6 @@ PS1='%B%F{magenta}%n%f%b $(dir_icon)  %B%F{red}%~%f%b${vcs_info_msg_0_} %(?.%B%F
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
-source /usr/share/zsh/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
@@ -220,10 +194,12 @@ alias \
 	trimlogs='sudo journalctl --vacuum-size=150M' \
 	pacclean="remorphans && sudo pacman -Sc && trimlogs" \
 	whathaveidone="tail -500 /var/log/pacman.log | grep -i 'installed\|removed\|graded' --color=never" \
-	refl='sudo reflector --protocol https --download-timeout 60 --verbose --age 6 --latest 100 --fastest 10 --sort rate --country "$(curl -Ls "ifconfig.co/country")" --save /etc/pacman.d/mirrorlist' \
+	refl='sudo reflector --protocol https --download-timeout 60 --verbose --age 6 --latest 100 --fastest 10 --sort rate --country "Italy,France" --save /etc/pacman.d/mirrorlist' \
   mirrors='refl' \
   pacupdate='sudo pacman -Syu'
 
+# Flag for reflector
+# --country "$(curl -Ls "ifconfig.co/country")"
 
 ## [Completion]
 ## Completion scripts setup. Remove the following line to uninstall

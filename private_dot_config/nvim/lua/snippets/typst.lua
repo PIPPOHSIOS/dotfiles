@@ -162,7 +162,7 @@ return {
                 path = f(function()
                   return "fig/" .. vim.fn.expand("%:r") .. "/" .. (args[1][1] or nil)
                 end),
-                ext = c(1, { t("svg"), t("jpg"), t("png") }),
+                ext = c(1, { t("png"), t("jpg"), t("svg") }),
               }
             )
           )

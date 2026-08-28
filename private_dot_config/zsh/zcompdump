@@ -1,4 +1,4 @@
-#files: 1058	version: 5.9.2
+#files: 1068	version: 5.9.2
 
 _comps=(
 '-' '_precommand'
@@ -182,7 +182,6 @@ _comps=(
 'certtool' '_gnutls'
 'cf' '_cf'
 'cftp' '_twisted'
-'chafa' '_chafa'
 'chage' '_users'
 'chatblade' '_chatblade'
 'chattr' '_chattr'
@@ -403,6 +402,7 @@ _comps=(
 'fakeroot' '_fakeroot'
 'fallocate' '_fallocate'
 'false' '_nothing'
+'fastfetch' '_fastfetch'
 'fc' '_fc'
 'fc-list' '_xft_fonts'
 'fc-match' '_xft_fonts'
@@ -764,6 +764,7 @@ _comps=(
 'journalctl' '_journalctl'
 'jq' '_jq'
 'jrnl' '_jrnl'
+'just' '_just'
 'kak' '_kak'
 'kcmshell5' '_systemsettings'
 'kcmshell6' '_systemsettings'
@@ -780,6 +781,7 @@ _comps=(
 'kinfocenter' '_systemsettings'
 'kioclient' '_kfmclient'
 'kitchen' '_kitchen'
+'kitty' '_kitty'
 'knock' '_knock'
 'konqueror' '_webbrowser'
 'kpartx' '_kpartx'
@@ -927,6 +929,7 @@ _comps=(
 'mencal' '_mencal'
 'mere' '_mere'
 'merge' '_rcs'
+'meson' '_meson'
 'metaflac' '_flac'
 'mformat' '_mtools'
 'mgv' '_pspdf'
@@ -1061,6 +1064,7 @@ _comps=(
 'ngrep' '_ngrep'
 'nice' '_nice'
 'ninja' '_ninja'
+'niri' '_niri'
 'nkf' '_nkf'
 'nl' '_nl'
 'nm' '_nm'
@@ -1211,6 +1215,7 @@ _comps=(
 'postmaster' '_postgresql'
 'postqueue' '_postfix'
 'postsuper' '_postfix'
+'powerprofilesctl' '_powerprofilesctl'
 'pr' '_pr'
 'pre-commit' '_pre-commit'
 'prev' '_mh'
@@ -1365,6 +1370,7 @@ _comps=(
 'sadf' '_sysstat'
 'sahara' '_openstack'
 'sar' '_sysstat'
+'satty' '_satty'
 'sbt' '_sbt'
 'scala' '_scala'
 'scalac' '_scala'
@@ -1520,6 +1526,7 @@ _comps=(
 'swaplabel' '_swaplabel'
 'swapoff' '_swapoff'
 'swapon' '_swapon'
+'swaylock' '_swaylock'
 'swift' '_swift'
 'swiftc' '_swift'
 'sync' '_nothing'
@@ -1628,6 +1635,9 @@ _comps=(
 'typst' '_typst'
 'ubuntu-distro-info' '_distro_info'
 'udevadm' '_udevadm'
+'udiskie' '_udiskie'
+'udiskie-mount' '_udiskie-mount'
+'udiskie-umount' '_udiskie-umount'
 'udisksctl' '_udisks2'
 'ufw' '_ufw'
 'ulimit' '_ulimit'
@@ -1866,7 +1876,6 @@ _comps=(
 'xxd' '_xxd'
 'xz' '_xz'
 'xzcat' '_xz'
-'yadm' '_yadm'
 'yafc' '_yafc'
 'yamllint' '_yamllint'
 'yarn' '_yarn'
@@ -2072,54 +2081,56 @@ autoload -Uz _afew _age _alacritty _archlinux-java _atach \
             _bear _bento4 _bitcoin-cli _blkid _bluetoothctl \
             _bootctl _bower _bundle _busctl _bwrap \
             _calibre _cap _cargo _cask _ccache \
-            _certbot _cf _chafa _chatblade _chcpu \
-            _chezmoi _chmem _choc _chpasswd _chromium \
-            _clang-check _clang-format _clang-tidy _cmake _codium \
-            _coffee _conan _concourse _coredumpctl _cppcheck \
-            _curl _dad _dart _deno _dget \
-            _dhcpcd _diana _direnv _diskutil _distro_info \
-            _docpad _dolphin _do-release-upgrade _ecdsautil _emacs \
-            _emulator _envdir _exportfs _eza _fab \
-            _fail2ban-client _fail2ban-regex _fallocate _ffind _flatpak \
+            _certbot _cf _chatblade _chcpu _chezmoi \
+            _chmem _choc _chpasswd _chromium _clang-check \
+            _clang-format _clang-tidy _cmake _codium _coffee \
+            _conan _concourse _coredumpctl _cppcheck _curl \
+            _dad _dart _deno _dget _dhcpcd \
+            _diana _direnv _diskutil _distro_info _docpad \
+            _dolphin _do-release-upgrade _ecdsautil _emacs _emulator \
+            _envdir _exportfs _eza _fab _fail2ban-client \
+            _fail2ban-regex _fallocate _fastfetch _ffind _flatpak \
             _flutter _fwupdmgr _gas _ghc _gio \
             _gist _git-flow _git-pulls _git-revise _git-wtf \
             _glances _golang _gpgconf _grpcurl _gtk-launch \
             _hello _hledger _hostnamectl _httpie _ibus \
             _img2sixel _include-what-you-use _insmod _inxi _ipcmk \
             _ipcrm _ipcs _jest _jmeter _jmeter-plugins \
-            _jonas _journalctl _jrnl _kak _kde-inhibit \
-            _kernel-install _keyring _kitchen _krunner _kscreen-doctor \
-            _l3build _language_codes _ldattach _lf _lilypond \
-            _localectl _loginctl _lscpu _lsipc _lslocks \
-            _lslogins _lsmem _lsmod _luarocks _luarocks-admin \
-            _lunchy _machinectl _mc _mcookie _middleman \
-            _mina _mix _mkcert _mkinitcpio _mpv \
-            _mssh _mussh _mvn _nano _nanoc \
-            _neo _neofetch _networkctl _networkQuality _nftables \
-            _ninja _node _nvm _oomctl _openssl \
-            _openvpn3 _optirun _p11-kit _pacman _patchelf \
-            _patool _periscope _phing _pip _pixz \
-            _pkcon _plasmashell _pm2 _port _pre-commit \
+            _jonas _journalctl _jrnl _just _kak \
+            _kde-inhibit _kernel-install _keyring _kitchen _kitty \
+            _krunner _kscreen-doctor _l3build _language_codes _ldattach \
+            _lf _lilypond _localectl _loginctl _lscpu \
+            _lsipc _lslocks _lslogins _lsmem _lsmod \
+            _luarocks _luarocks-admin _lunchy _machinectl _mc \
+            _mcookie _meson _middleman _mina _mix \
+            _mkcert _mkinitcpio _mpv _mssh _mussh \
+            _mvn _nano _nanoc _neo _neofetch \
+            _networkctl _networkQuality _nftables _ninja _niri \
+            _node _nvm _oomctl _openssl _openvpn3 \
+            _optirun _p11-kit _pacman _patchelf _patool \
+            _periscope _phing _pip _pixz _pkcon \
+            _plasmashell _pm2 _port _powerprofilesctl _pre-commit \
             _protoc _pulseaudio _pygmentize _qmk _qpdf \
             _rails _ralio _rdfind _redis-cli _resolvectl \
             _rev _rfkill _rg _rmlint _rmmod \
             _rslsync _rspec _rubocop _run0 _rustup \
-            _sbt _scala _screencapture _scrub _sd_bus_address \
-            _sdd _sd_hosts_or_user_at_host _sdkmanager _sd_machines _sd_outputmodes \
-            _sd_unit_files _sensors _sensors-detect _setcap _setup.py \
-            _shallow-backup _shellcheck _showoff _sox_ng _sqv \
-            _srm _sslscan _storagectl _subliminal _supervisord \
-            _svm _swaplabel _swapoff _swapon _systemctl \
-            _systemd _systemd-analyze _systemd-delta _systemd-hwdb _systemd-id128 \
-            _systemd-inhibit _systemd-nspawn _systemd-path _systemd-run _systemd-sysinstall \
-            _systemd-tmpfiles _systemsettings _teamocil _texdoc _textutil \
-            _thor _timedatectl _tinymist _tmuxinator _tox \
-            _trust _tsc _ts-node _tsx _typst \
-            _udevadm _udisks2 _udisksctl _ufw _upower \
-            _userdbctl _uuidd _uuidgen _uuidparse _varlinkctl \
-            _vipw _virtualbox _vnstat _wdctl _wemux \
-            _wg-quick _wl-copy _wl-paste _wpctl _xdg-mime \
-            _xsel _yadm _yamllint _yarn _yay \
+            _satty _sbt _scala _screencapture _scrub \
+            _sd_bus_address _sdd _sd_hosts_or_user_at_host _sdkmanager _sd_machines \
+            _sd_outputmodes _sd_unit_files _sensors _sensors-detect _setcap \
+            _setup.py _shallow-backup _shellcheck _showoff _sox_ng \
+            _sqv _srm _sslscan _storagectl _subliminal \
+            _supervisord _svm _swaplabel _swapoff _swapon \
+            _swaylock _systemctl _systemd _systemd-analyze _systemd-delta \
+            _systemd-hwdb _systemd-id128 _systemd-inhibit _systemd-nspawn _systemd-path \
+            _systemd-run _systemd-sysinstall _systemd-tmpfiles _systemsettings _teamocil \
+            _texdoc _textutil _thor _timedatectl _tinymist \
+            _tmuxinator _tox _trust _tsc _ts-node \
+            _tsx _typst _udevadm _udiskie _udiskie-canonical_paths \
+            _udiskie-mount _udiskie-umount _udisks2 _udisksctl _ufw \
+            _upower _userdbctl _uuidd _uuidgen _uuidparse \
+            _varlinkctl _vipw _virtualbox _vnstat _wdctl \
+            _wemux _wg-quick _wl-copy _wl-paste _wpctl \
+            _xdg-mime _xsel _yamllint _yarn _yay \
             _yt-dlp _zathura _zcash-cli _zoxide _zramctl \
             _cdr _all_labels _all_matches _alternative _approximate \
             _arg_compile _arguments _as_if _bash_completions _cache_invalid \

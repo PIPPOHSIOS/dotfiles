@@ -1,0 +1,179 @@
+{
+  "Options": {
+    "firstPublished": true,
+    "genreMappings": {
+      "Adult": [
+        "Adult"
+      ],
+      "Adult Fiction": [
+        "Adult"
+      ],
+      "Adventure": [
+        "Adventure"
+      ],
+      "Anthologies": [
+        "Anthologies"
+      ],
+      "Art": [
+        "Art"
+      ],
+      "Biography": [
+        "Biography"
+      ],
+      "Biography Memoir": [
+        "Biography"
+      ],
+      "Business": [
+        "Business"
+      ],
+      "Chick-lit": [
+        "Chick-lit"
+      ],
+      "Childrens": [
+        "Childrens"
+      ],
+      "Classics": [
+        "Classics"
+      ],
+      "Comedy": [
+        "Humour"
+      ],
+      "Comics": [
+        "Comics"
+      ],
+      "Contemporary": [
+        "Contemporary"
+      ],
+      "Cookbooks": [
+        "Cookbooks"
+      ],
+      "Crime": [
+        "Crime"
+      ],
+      "Fantasy": [
+        "Fantasy"
+      ],
+      "Feminism": [
+        "Feminism"
+      ],
+      "Gardening": [
+        "Gardening"
+      ],
+      "Gay": [
+        "Gay"
+      ],
+      "Glbt": [
+        "Gay"
+      ],
+      "Graphic Novels Comics": [
+        "Comics"
+      ],
+      "Health": [
+        "Health"
+      ],
+      "Historical Fiction": [
+        "Historical"
+      ],
+      "History": [
+        "History"
+      ],
+      "Horror": [
+        "Horror"
+      ],
+      "Humor": [
+        "Humour"
+      ],
+      "Inspirational": [
+        "Inspirational"
+      ],
+      "Manga": [
+        "Manga"
+      ],
+      "Modern": [
+        "Modern"
+      ],
+      "Music": [
+        "Music"
+      ],
+      "Mystery": [
+        "Mystery"
+      ],
+      "Non Fiction": [
+        "Non-Fiction"
+      ],
+      "Paranormal": [
+        "Paranormal"
+      ],
+      "Philosophy": [
+        "Philosophy"
+      ],
+      "Poetry": [
+        "Poetry"
+      ],
+      "Politics": [
+        "Politics"
+      ],
+      "Psychology": [
+        "Psychology"
+      ],
+      "Reference": [
+        "Reference"
+      ],
+      "Religion": [
+        "Religion"
+      ],
+      "Romance": [
+        "Romance"
+      ],
+      "Science": [
+        "Science"
+      ],
+      "Science Fiction": [
+        "Science Fiction"
+      ],
+      "Science Fiction Fantasy": [
+        "Fantasy",
+        "Science Fiction"
+      ],
+      "Self Help": [
+        "Self Help"
+      ],
+      "Sociology": [
+        "Sociology"
+      ],
+      "Spirituality": [
+        "Spirituality"
+      ],
+      "Suspense": [
+        "Suspense"
+      ],
+      "Thriller": [
+        "Thriller"
+      ],
+      "Travel": [
+        "Travel"
+      ],
+      "Vampires": [
+        "Vampires"
+      ],
+      "War": [
+        "War"
+      ],
+      "Western": [
+        "Western"
+      ],
+      "Writing": [
+        "Writing"
+      ],
+      "Young Adult": [
+        "Young Adult"
+      ]
+    },
+    "getAllAuthors": false,
+    "getAsin": false,
+    "getEditions": false,
+    "getRating": false,
+    "getVotes": false,
+    "mapGenres": true
+  }
+}

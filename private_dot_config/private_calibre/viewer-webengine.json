@@ -1,0 +1,258 @@
+{
+  "geometry-of-main_window_geometry": {
+    "frame_geometry": {
+      "height": 606,
+      "width": 514,
+      "x": 0,
+      "y": 0
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 576,
+      "width": 512,
+      "x": 1,
+      "y": 29
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 576,
+      "width": 512,
+      "x": 1,
+      "y": 29
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAAAAAAAAAAAAgEAAAJdAAAAAQAAAB0AAAIAAAACXAAAAAAAAAAABgAAAAABAAAAHQAAAgAAAAJc"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.25,
+      "geometry_in_logical_pixels": {
+        "height": 864,
+        "width": 1536,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "Chimei Innolux Corporation",
+      "model": "",
+      "name": "eDP-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 864,
+        "width": 1536
+      },
+      "virtual_geometry": {
+        "height": 864,
+        "width": 1536,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "geometry-of-viewer_image_popup_geometry": {
+    "frame_geometry": {
+      "height": 124,
+      "width": 863,
+      "x": 336,
+      "y": 319
+    },
+    "full_screened": false,
+    "geometry": {
+      "height": 124,
+      "width": 863,
+      "x": 336,
+      "y": 319
+    },
+    "maximized": false,
+    "normal_geometry": {
+      "height": 124,
+      "width": 863,
+      "x": 336,
+      "y": 319
+    },
+    "qt": {
+      "__class__": "bytearray",
+      "__value__": "AdnQywADAAAAAAFQAAABPwAABK4AAAG6AAABUAAAAT8AAASuAAABugAAAAAAAAAABgAAAAFQAAABPwAABK4AAAG6"
+    },
+    "screen": {
+      "depth": 24,
+      "device_pixel_ratio": 1.25,
+      "geometry_in_logical_pixels": {
+        "height": 864,
+        "width": 1536,
+        "x": 0,
+        "y": 0
+      },
+      "index_in_screens_list": 0,
+      "manufacturer": "Chimei Innolux Corporation",
+      "model": "",
+      "name": "eDP-1",
+      "serial": "",
+      "size_in_logical_pixels": {
+        "height": 864,
+        "width": 1536
+      },
+      "virtual_geometry": {
+        "height": 864,
+        "width": 1536,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "main_window_state": {
+    "__class__": "bytearray",
+    "__value__": "AAAA/wAAAAH9AAAAAgAAAAAAAAAAAAAAAPwCAAAAAvsAAAAQAHQAbwBjAC0AZABvAGMAawAAAAAA/////wAAAIoA////+wAAABYAcwBlAGEAcgBjAGgALQBkAG8AYwBrAAAAAAD/////AAAAmgD///8AAAABAAAAAAAAAAD8AgAAAAT7AAAAFgBsAG8AbwBrAHUAcAAtAGQAbwBjAGsAAAAAAP////8AAACDAP////sAAAAcAGIAbwBvAGsAbQBhAHIAawBzAC0AZABvAGMAawAAAAAA/////wAAAPIA////+wAAABwAaQBuAHMAcABlAGMAdABvAHIALQBkAG8AYwBrAAAAAAD/////AAAAFAD////7AAAAHgBoAGkAZwBoAGwAaQBnAGgAdABzAC0AZABvAGMAawAAAAAA/////wAAANcA////AAACAAAAAkAAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAAAAAAAAQAAAB4AYQBjAHQAaQBvAG4AcwBfAHQAbwBvAGwAYgBhAHICAAAAAP////8AAAAAAAAAAA=="
+  },
+  "old_prefs_migrated": true,
+  "session_data": {
+    "controls_help_shown_count": 2,
+    "standalone_font_settings": {},
+    "standalone_misc_settings": {
+      "remember_last_read": true,
+      "remember_window_geometry": false,
+      "save_annotations_in_ebook": true,
+      "singleinstance": false
+    },
+    "standalone_recently_opened": [
+      {
+        "authors": [
+          "Элиезер Юдковский"
+        ],
+        "key": "/home/andrea/Documents/Library/Eliiezier Iudkovskii/Garri Pottier i mietody ratsional'nogho myshlieniia (25)/Garri Pottier i mietody ratsional'nogho my - Eliiezier Iudkovskii.epub",
+        "pathtoebook": "/home/andrea/Documents/Library/Eliiezier Iudkovskii/Garri Pottier i mietody ratsional'nogho myshlieniia (25)/Garri Pottier i mietody ratsional'nogho my - Eliiezier Iudkovskii.epub",
+        "timestamp": "2025-10-18T21:04:06.820Z",
+        "title": "Гарри Поттер и методы рационального мышления"
+      },
+      {
+        "authors": [
+          "Лю Цысинь"
+        ],
+        "key": "/home/andrea/Documents/Books/Задача трех тел -- Лю Цысинь [Цысинь, Лю] -- Воспоминания о прошлом Земли #1, 2017 -- Издательство «Э».epub",
+        "pathtoebook": "/home/andrea/Documents/Books/Задача трех тел -- Лю Цысинь [Цысинь, Лю] -- Воспоминания о прошлом Земли #1, 2017 -- Издательство «Э».epub",
+        "timestamp": "2025-09-07T23:09:10.495Z",
+        "title": "Задача трех тел"
+      },
+      {
+        "authors": [
+          "Simone de Beauvoir"
+        ],
+        "key": "/home/andrea/Documents/Library/Simone de Beauvoir/The Second Sex (22)/The Second Sex - Simone de Beauvoir.epub",
+        "pathtoebook": "/home/andrea/Documents/Library/Simone de Beauvoir/The Second Sex (22)/The Second Sex - Simone de Beauvoir.epub",
+        "timestamp": "2025-04-19T08:01:59.200Z",
+        "title": "The Second Sex"
+      },
+      {
+        "authors": [
+          "Федор Михайлович Достоевский"
+        ],
+        "key": "/home/andrea/Documents/Library/Fiedor Mikhailovich Dostoievskii/Bielyie nochi (21)/Bielyie nochi - Fiedor Mikhailovich Dostoievskii.epub",
+        "pathtoebook": "/home/andrea/Documents/Library/Fiedor Mikhailovich Dostoievskii/Bielyie nochi (21)/Bielyie nochi - Fiedor Mikhailovich Dostoievskii.epub",
+        "timestamp": "2025-02-22T23:07:11.977Z",
+        "title": "Белые ночи"
+      },
+      {
+        "authors": [
+          "Федор Михайлович Достоевский",
+          "Антонина Лукинична Максимова"
+        ],
+        "key": "/home/andrea/Documents/Library/Fiedor Mikhailovich Dostoievskii/Bielyie nochi (8)/Bielyie nochi - Fiedor Mikhailovich Dostoievskii.epub",
+        "pathtoebook": "/home/andrea/Documents/Library/Fiedor Mikhailovich Dostoievskii/Bielyie nochi (8)/Bielyie nochi - Fiedor Mikhailovich Dostoievskii.epub",
+        "timestamp": "2025-02-18T21:30:27.287Z",
+        "title": "Белые ночи"
+      },
+      {
+        "authors": [
+          "Albert Camus"
+        ],
+        "key": "/home/andrea/Documents/Library/Albert Camus/The Stranger (19)/The Stranger - Albert Camus.epub",
+        "pathtoebook": "/home/andrea/Documents/Library/Albert Camus/The Stranger (19)/The Stranger - Albert Camus.epub",
+        "timestamp": "2025-01-23T17:08:09.628Z",
+        "title": "The Stranger"
+      },
+      {
+        "authors": [
+          "Lee, Harper"
+        ],
+        "key": "/home/andrea/Documents/Library/Lee, Harper/To Kill a Mockingbird (16)/To Kill a Mockingbird - Lee, Harper.epub",
+        "pathtoebook": "/home/andrea/Documents/Library/Lee, Harper/To Kill a Mockingbird (16)/To Kill a Mockingbird - Lee, Harper.epub",
+        "timestamp": "2025-01-23T14:08:03.367Z",
+        "title": "Lee, Harper - To Kill a Mockingbird"
+      },
+      {
+        "authors": [
+          "F. Scott Fitzgerald"
+        ],
+        "key": "/home/andrea/Documents/Library/F. Scott Fitzgerald/The Great Gatsby (4)/The Great Gatsby - F. Scott Fitzgerald.epub",
+        "pathtoebook": "/home/andrea/Documents/Library/F. Scott Fitzgerald/The Great Gatsby (4)/The Great Gatsby - F. Scott Fitzgerald.epub",
+        "timestamp": "2025-01-23T12:07:18.351Z",
+        "title": "The Great Gatsby"
+      },
+      {
+        "authors": [
+          "Dorothy Tennov"
+        ],
+        "key": "/home/andrea/Documents/Library/Dorothy Tennov/Love and Limerence_ The Experience of Being in Love (7)/Love and Limerence_ The Experience of Bein - Dorothy Tennov.epub",
+        "pathtoebook": "/home/andrea/Documents/Library/Dorothy Tennov/Love and Limerence_ The Experience of Being in Love (7)/Love and Limerence_ The Experience of Bein - Dorothy Tennov.epub",
+        "timestamp": "2025-01-23T10:43:02.900Z",
+        "title": "Love and Limerence"
+      },
+      {
+        "authors": [
+          "John Schember"
+        ],
+        "key": "/home/andrea/Documents/Library/John Schember/Quick Start Guide (1)/Quick Start Guide - John Schember.epub",
+        "pathtoebook": "/home/andrea/Documents/Library/John Schember/Quick Start Guide (1)/Quick Start Guide - John Schember.epub",
+        "timestamp": "2025-01-21T21:21:52.718Z",
+        "title": "Quick Start Guide"
+      },
+      {
+        "authors": [
+          "Dyachenko, Sergey",
+          "Dyachenko, Marina"
+        ],
+        "key": "/home/andrea/Documents/Library/Dyachenko, Sergey/[Mietamorfozy 01] _ Vita Nostra (6)/[Mietamorfozy 01] _ Vita Nostra - Dyachenko, Sergey.epub",
+        "pathtoebook": "/home/andrea/Documents/Library/Dyachenko, Sergey/[Mietamorfozy 01] _ Vita Nostra (6)/[Mietamorfozy 01] _ Vita Nostra - Dyachenko, Sergey.epub",
+        "timestamp": "2025-01-19T11:27:13.374Z",
+        "title": "[Метаморфозы 01] • Vita Nostra"
+      },
+      {
+        "authors": [
+          "Марина и Сергей Дяченко"
+        ],
+        "key": "/home/andrea/Documents/Library/Marina i Sierghiei Diachienko/Vita Nostra. Rabota nad oshibkami [litres s optimizirovannoi oblozhkoi] (5)/Vita Nostra. Rabota nad oshibkami [litres - Marina i Sierghiei Diachienko.fb2",
+        "pathtoebook": "/home/andrea/Documents/Library/Marina i Sierghiei Diachienko/Vita Nostra. Rabota nad oshibkami [litres s optimizirovannoi oblozhkoi] (5)/Vita Nostra. Rabota nad oshibkami [litres - Marina i Sierghiei Diachienko.fb2",
+        "timestamp": "2025-01-19T11:24:20.965Z",
+        "title": "Vita Nostra. Работа над ошибками [litres с оптимизированной обложкой]"
+      },
+      {
+        "authors": [
+          "Lewis Carroll"
+        ],
+        "key": "/home/andrea/Documents/Library/Lewis Carroll/Through the Looking Glass (And What Alice Found There) (3)/Through the Looking Glass (And What Alice - Lewis Carroll.epub",
+        "pathtoebook": "/home/andrea/Documents/Library/Lewis Carroll/Through the Looking Glass (And What Alice Found There) (3)/Through the Looking Glass (And What Alice - Lewis Carroll.epub",
+        "timestamp": "2025-01-17T15:24:44.769Z",
+        "title": "Through the Looking Glass (And What Alice Found There)"
+      },
+      {
+        "authors": [
+          "Lewis Carroll"
+        ],
+        "key": "/home/andrea/Documents/Library/Lewis Carroll/Alice's Adventures in Wonderland (2)/Alice's Adventures in Wonderland - Lewis Carroll.epub",
+        "pathtoebook": "/home/andrea/Documents/Library/Lewis Carroll/Alice's Adventures in Wonderland (2)/Alice's Adventures in Wonderland - Lewis Carroll.epub",
+        "timestamp": "2025-01-17T15:24:38.302Z",
+        "title": "Alice's Adventures in Wonderland"
+      },
+      {
+        "authors": [
+          "Lewis Carroll"
+        ],
+        "key": "/tmp/calibre_7.24.0_tmp_94tqxrhg/iy_o1vwz_view_device_book.epub",
+        "pathtoebook": "/tmp/calibre_7.24.0_tmp_94tqxrhg/iy_o1vwz_view_device_book.epub",
+        "timestamp": "2025-01-17T15:09:42.389Z",
+        "title": "Alice's Adventures in Wonderland"
+      }
+    ]
+  }
+}
