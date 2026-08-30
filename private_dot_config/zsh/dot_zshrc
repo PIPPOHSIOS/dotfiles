@@ -1,6 +1,6 @@
-#  ╔═╗╔═╗╦ ╦╦═╗╔═╗  ╔═╗╔═╗╔╗╔╔═╗╦╔═╗	- z0mbi3
-#  ╔═╝╚═╗╠═╣╠╦╝║    ║  ║ ║║║║╠╣ ║║ ╦	- https://github.com/gh0stzk/dotfiles
-#  ╚═╝╚═╝╩ ╩╩╚═╚═╝  ╚═╝╚═╝╝╚╝╚  ╩╚═╝	- My zsh conf
+#  ╔═╗╔═╗╦ ╦╦═╗╔═╗  ╔═╗╔═╗╔╗╔╔═╗╦╔═╗
+#  ╔═╝╚═╗╠═╣╠╦╝║    ║  ║ ║║║║╠╣ ║║ ╦
+#  ╚═╝╚═╝╩ ╩╩╚═╚═╝  ╚═╝╚═╝╝╚╝╚  ╩╚═╝
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -32,6 +32,11 @@ zstyle ':completion:*:warnings' format "%B%F{red}No matches for:%f %F{magenta}%d
 zstyle ':completion:*:descriptions' format '%F{yellow}[-- %d --]%f'
 zstyle ':vcs_info:*' formats ' %B%s-[%F{magenta}%f %F{yellow}%b%f]-'
 
+# Move and edit words in the manner of bash,
+# where only alphanumeric characters are considered word characters
+autoload -U select-word-style
+select-word-style bash
+
 #  ┬ ┬┬┌─┐┌┬┐┌─┐┬─┐┬ ┬
 #  ├─┤│└─┐ │ │ │├┬┘└┬┘
 #  ┴ ┴┴└─┘ ┴ └─┘┴└─ ┴
@@ -53,7 +58,7 @@ setopt hist_find_no_dups
 setopt AUTOCD              # change directory just by typing its name
 setopt PROMPT_SUBST        # enable command substitution in prompt
 setopt MENU_COMPLETE       # Automatically highlight first element of completion menu
-setopt LIST_PACKED		   # The completion menu takes less space.
+setopt LIST_PACKED         # The completion menu takes less space.
 setopt AUTO_LIST           # Automatically list choices on ambiguous completion.
 setopt COMPLETE_IN_WORD    # Complete from both ends of a word.
 
@@ -200,11 +205,6 @@ alias \
 
 # Flag for reflector
 # --country "$(curl -Ls "ifconfig.co/country")"
-
-## [Completion]
-## Completion scripts setup. Remove the following line to uninstall
-[[ -f /home/andrea/.dart-cli-completion/zsh-config.zsh ]] && . /home/andrea/.dart-cli-completion/zsh-config.zsh || true
-## [/Completion]
 
 fpath+=~/.zfunc; autoload -Uz compinit; compinit
 eval "$(zoxide init zsh)"
