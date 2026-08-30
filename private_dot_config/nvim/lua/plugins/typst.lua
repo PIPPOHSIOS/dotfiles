@@ -4,7 +4,7 @@ return {
     lazy = false, -- or ft = 'typst'
     version = "1.*",
     opts = {
-      -- port = 41293,
+      port = 41293,
       dependencies_bin = {
         tinymist = "tinymist",
       },

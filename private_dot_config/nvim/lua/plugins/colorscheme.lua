@@ -3,9 +3,14 @@ return {
   {
     "olimorris/onedarkpro.nvim",
     priority = 1000, -- Ensure it loads first
+    opts = {
+      options = {
+        transparency = true,
+      },
+    },
   },
 
-  -- Configure LazyVim to load gruvbox
+  -- Configure LazyVim to load onedark
   {
     "LazyVim/LazyVim",
     opts = {

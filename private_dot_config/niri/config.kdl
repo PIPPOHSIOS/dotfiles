@@ -69,7 +69,7 @@ input {
     focus-follows-mouse max-scroll-amount="5%"
 
     // Configure the power button elsewhere
-    disable-power-key-handling
+    // disable-power-key-handling
 }
 
 // You can configure outputs by their name, which you can find
@@ -323,6 +323,15 @@ window-rule {
   }
 }
 
+// Enable blur behind the Ghostty terminal
+window-rule {
+  match app-id="^com.mitchellh.ghostty$"
+  draw-border-with-background false
+  background-effect { 
+    blur true
+  }
+}
+
 // Enable blur behind PCManFM file manager
 window-rule {
   match app-id="^pcmanfm-qt"
@@ -332,12 +341,6 @@ window-rule {
     blur true
   }
 }
-
-// Make Thunar's rename file window floating
-// window-rule {
-//   match app-id="^thunar" title=r#"^Rename"#
-//   open-floating true
-// }
 
 // Open the Firefox picture-in-picture player as floating by default.
 window-rule {
@@ -414,7 +417,7 @@ binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
-    Mod+Return hotkey-overlay-title="Open kitty" { spawn "kitty"; }
+    Mod+Return hotkey-overlay-title="Open Ghostty" { spawn "kitty"; }
     // Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     // Super+Alt+L hotkey-overlay-title="Lock the Screen" { spawn "swaylock"; }
     Mod+B hotkey-overlay-title="Open Librewolf" { spawn "librewolf"; }
@@ -705,7 +708,7 @@ binds {
     XF86MonBrightnessDown { spawn-sh "noctalia msg brightness-down"; }
 
     // Poweroff button opens Noctalia session menu
-    XF86PowerOff hotkey-overlay-title="Open Noctalia Session Menu" { spawn-sh "noctalia msg panel-toggle session"; }
+    // XF86PowerOff hotkey-overlay-title="Open Noctalia Session Menu" { spawn-sh "noctalia msg panel-toggle session"; }
 }
 
 cursor {
@@ -768,6 +771,5 @@ debug {
   // Allows notification actions and window activation from Noctalia.
   honor-xdg-activation-with-invalid-serial
 }
-
 
 include "noctalia.kdl"
