@@ -120,7 +120,7 @@ alias \
 	rm="rm -vI" \
 	bc="bc -ql" \
 	rsync="rsync -vrPlu" \
-	mkd="mkdir -pv" \
+	mkdir="mkdir -pv" \
 	ffmpeg="ffmpeg -hide_banner" \
 	:q="exit" \
 	help="man" \

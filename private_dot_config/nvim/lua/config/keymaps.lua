@@ -4,10 +4,9 @@
 
 local map = vim.keymap.set
 
--- Use system clipboard with intended commands
-vim.keymap.set("v", "<C-S-c>", '"+y', { desc = "Copy to system clipboard" })
-vim.keymap.set({ "n", "v" }, "<C-S-v>", '"+p', { desc = "Paste from system clipboard" })
-vim.keymap.set("i", "<C-S-v>", "<C-r>+", { desc = "Paste from system clipboard" })
+-- Yank to system clipboard
+vim.keymap.set({ "n", "v" }, "y", '"+y', { desc = "Yank to system clipboard" })
+vim.keymap.set({ "n", "v" }, "Y", '"+Y', { desc = "Yank line to system clipboard" })
 
 -- Use Control+Backspace to delete a word
 map("i", "<C-BS>", "<C-w>")

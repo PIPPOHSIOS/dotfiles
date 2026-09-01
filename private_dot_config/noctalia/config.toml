@@ -27,7 +27,7 @@ order = [ "default" ]
     margin_ends = 0
     radius = 0
     shadow = false
-    start = [ "launcher", "group:g1", "wallpaper", "workspaces", "taskbar", "media" ]
+    start = [ "group:g1", "workspaces", "taskbar", "media" ]
 
         [[bar.default.capsule_group]]
         accordion = false
@@ -35,7 +35,7 @@ order = [ "default" ]
         enabled = true
         fill = "surface_variant"
         id = "g1"
-        members = [ "control-center", "settings" ]
+        members = [ "launcher", "control-center", "settings", "wallpaper" ]
         opacity = 1.0
         padding = 6.0
         widget_spacing = 12
@@ -234,6 +234,10 @@ directory = "/home/andrea/Pictures/Wallpapers"
     [wallpaper.monitors.eDP-1]
     path = "/home/andrea/Pictures/Wallpapers/wallhaven-6ly5lw.jpg"
 
+[widget.battery]
+hide_when_full = true
+hide_when_plugged = true
+
 [widget.clock]
 tooltip_format = "{:%H:%M:%S}"
 
@@ -246,6 +250,9 @@ tooltip_format = "{:%d/%m/%Y}"
 [widget.input_volume]
 hide_when_inactive = true
 
+[widget.launcher]
+glyph = "niri"
+
 [widget.media]
 hide_when_no_media = true
 
@@ -255,4 +262,4 @@ show_label = false
 [widget.tray]
 detached_panel = true
 drawer = true
-pinned = [ "Fcitx", "Vesktop" ]
+pinned = [ "Fcitx" ]
