@@ -35,7 +35,7 @@ order = [ "default" ]
         enabled = true
         fill = "surface_variant"
         id = "g1"
-        members = [ "launcher", "control-center", "settings", "wallpaper" ]
+        members = [ "control-center", "launcher", "settings", "wallpaper" ]
         opacity = 1.0
         padding = 6.0
         widget_spacing = 12
@@ -242,7 +242,7 @@ hide_when_plugged = true
 tooltip_format = "{:%H:%M:%S}"
 
 [widget.control-center]
-glyph = "layout"
+glyph = "niri"
 
 [widget.date]
 tooltip_format = "{:%d/%m/%Y}"
@@ -251,7 +251,7 @@ tooltip_format = "{:%d/%m/%Y}"
 hide_when_inactive = true
 
 [widget.launcher]
-glyph = "niri"
+glyph = "search"
 
 [widget.media]
 hide_when_no_media = true
