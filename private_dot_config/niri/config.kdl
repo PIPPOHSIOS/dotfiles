@@ -333,6 +333,17 @@ window-rule {
   }
 }
 
+// Enable blur behind KDE portal implementation
+window-rule {
+  match app-id="^org.freedesktop.impl.portal.desktop.kde"
+  opacity 0.9
+  draw-border-with-background false
+  background-effect {
+    xray false
+    blur true
+  }
+}
+
 // Open the Firefox picture-in-picture player as floating by default.
 window-rule {
     // This app-id regular expression will work for both:
