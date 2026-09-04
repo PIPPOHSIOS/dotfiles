@@ -9,7 +9,7 @@ order = [ "default" ]
 
     [bar.default]
     capsule = true
-    center = [ "clock", "date" ]
+    center = [ "clock" ]
     concave_edge_corners = false
     end = [
         "tray",
@@ -197,13 +197,13 @@ enabled = []
 [shell]
 app_icon_color = "on_surface_variant"
 corner_radius_scale = 0.5000000074505806
-font_family = "Noto Sans"
 polkit_agent = true
 
     [shell.panel]
     clipboard_position = "auto"
     control_center_placement = "floating"
     session_placement = "floating"
+    session_position = "center"
     transparency_mode = "glass"
     wallpaper_placement = "floating"
 
@@ -239,13 +239,11 @@ hide_when_full = true
 hide_when_plugged = true
 
 [widget.clock]
+format = "{:%H:%M · %A %d/%m/%y}"
 tooltip_format = "{:%H:%M:%S}"
 
 [widget.control-center]
 glyph = "niri"
-
-[widget.date]
-tooltip_format = "{:%d/%m/%Y}"
 
 [widget.input_volume]
 hide_when_inactive = true

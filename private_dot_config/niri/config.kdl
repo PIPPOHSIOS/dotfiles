@@ -69,7 +69,7 @@ input {
     focus-follows-mouse max-scroll-amount="5%"
 
     // Configure the power button elsewhere
-    // disable-power-key-handling
+    disable-power-key-handling
 }
 
 // You can configure outputs by their name, which you can find
@@ -692,7 +692,7 @@ binds {
 
     // Powers off the monitors. To turn them back on, do any input like
     // moving the mouse or pressing any other key.
-    Mod+Shift+P { power-off-monitors; }
+    // Mod+Shift+P { power-off-monitors; }
 
     // Core Noctalia binds
     Mod+D hotkey-overlay-title="Open Noctalia Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
@@ -710,7 +710,9 @@ binds {
     XF86MonBrightnessDown { spawn-sh "noctalia msg brightness-down"; }
 
     // Poweroff button opens Noctalia session menu
-    // XF86PowerOff hotkey-overlay-title="Open Noctalia Session Menu" { spawn-sh "noctalia msg panel-toggle session"; }
+    XF86PowerOff hotkey-overlay-title="Open Noctalia Session Menu" { spawn-sh "noctalia msg panel-toggle session"; }
+    Mod+Shift+P hotkey-overlay-title="Open Noctalia Session Menu" { spawn-sh "noctalia msg panel-toggle session"; }
+
 }
 
 cursor {
