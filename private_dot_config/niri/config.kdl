@@ -333,6 +333,16 @@ window-rule {
   }
 }
 
+// Enable blur behind PCManFM-Qt
+window-rule {
+  match app-id="^pcmanfm-qt"
+  opacity 0.9
+  draw-border-with-background false
+  background-effect {
+    blur true
+  }
+}
+
 // Enable blur behind KDE portal implementation
 window-rule {
   match app-id="^org.freedesktop.impl.portal.desktop.kde"
@@ -423,7 +433,8 @@ binds {
     // Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
     // Super+Alt+L hotkey-overlay-title="Lock the Screen" { spawn "swaylock"; }
     Mod+B hotkey-overlay-title="Open Librewolf" { spawn "librewolf"; }
-    Mod+E hotkey-overlay-title="Open Dolphin" { spawn "dolphin"; }
+    // Mod+E hotkey-overlay-title="Open Dolphin" { spawn "dolphin"; }
+    Mod+E hotkey-overlay-title="Open PCManFM-Qt" { spawn "pcmanfm-qt"; }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
