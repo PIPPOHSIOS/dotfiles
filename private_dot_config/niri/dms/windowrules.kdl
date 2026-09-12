@@ -1,0 +1,52 @@
+// DMS Window Rules - Managed by DankMaterialShell
+// Do not edit manually - changes may be overwritten
+
+// @id=dms-floating-windows @name=DMS Floating Windows
+window-rule {
+    match app-id="^com.danklinux.dms$"
+    open-floating true
+}
+
+// @id=wr_1789236305963808019 @name=Blur Kitty
+window-rule {
+    match app-id="^kitty$"
+    background-effect {
+        blur true
+    }
+}
+
+// @id=wr_1789236382606717832 @name=PCManFM-Qt
+window-rule {
+    match app-id="^pcmanfm-qt$"
+    opacity 0.90
+    background-effect {
+        blur true
+    }
+}
+
+// @id=wr_1789236478662342341 @name=Fcitx5 Input Window
+window-rule {
+    match app-id="^fcitx$" title="^Fcitx5 Input WIndow$"
+    opacity 1.00
+    open-floating true
+}
+
+// @id=wr_1789236675652285169 @name=MPV
+window-rule {
+    match app-id="^mpv$"
+    default-column-width { fixed 1024; }
+    default-window-height { fixed 567; }
+    tiled-state true
+}
+
+// @id=wr_1789236716897788992 @name=Anki
+window-rule {
+    match app-id="^anki$" title="^- Anki$"
+    open-maximized-to-edges true
+}
+
+// @id=wr_1789236748595872064 @name=Anki - Edit Current
+window-rule {
+    match app-id="^anki$" title="^Edit Current$"
+    open-floating true
+}
