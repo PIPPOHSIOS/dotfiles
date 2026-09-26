@@ -1,7 +1,7 @@
 {
   "currentThemeName": "dynamic",
   "currentThemeCategory": "dynamic",
-  "customThemeFile": "/home/andrea/.config/DankMaterialShell/themes/darkmatter/theme.json",
+  "customThemeFile": "/home/andrea/.config/DankMaterialShell/themes/arcdarkest/theme.json",
   "registryThemeVariants": {
     "gnomeAdwaita": "slate",
     "monokaiPro": {
@@ -13,15 +13,15 @@
     "petrichor": "green",
     "catppuccin": {
       "dark": {
-        "flavor": "macchiato",
-        "accent": "peach"
+        "flavor": "mocha",
+        "accent": "lavender"
       }
     }
   },
   "popupTransparency": 0.9,
   "cornerRadius": 12,
   "niriLayoutRadiusOverride": 4,
-  "niriLayoutBorderSize": 1,
+  "niriLayoutBorderSize": 2,
   "mouseAccelProfile": "flat",
   "blurEnabled": true,
   "blurWallpaperOnOverview": true,
@@ -29,6 +29,10 @@
   "showWorkspaceIndex": true,
   "showWorkspaceName": true,
   "appIdSubstitutions": [],
+  "appDrawerSectionViewModes": {
+    "apps": "list"
+  },
+  "networkPreference": "wifi",
   "iconThemeDark": "Papirus-Dark",
   "cursorSettings": {
     "theme": "Adwaita",
@@ -54,6 +58,7 @@
   "batteryLockTimeout": 600,
   "batterySuspendTimeout": 900,
   "batteryChargeLimit": 80,
+  "matugenTemplateKitty": false,
   "osdPowerProfileEnabled": true,
   "barConfigs": [
     {
@@ -68,18 +73,28 @@
       "leftWidgets": [
         "launcherButton",
         "workspaceSwitcher",
-        "focusedWindow",
         {
           "id": "runningApps",
           "enabled": true,
           "runningAppsCompactMode": true,
-          "runningAppsGroupByApp": false,
-          "runningAppsCurrentWorkspace": true,
+          "runningAppsGroupByApp": true,
+          "runningAppsCurrentWorkspace": false,
           "runningAppsCurrentMonitor": false
+        },
+        {
+          "id": "focusedWindow",
+          "enabled": true,
+          "focusedWindowCompactMode": true,
+          "focusedWindowSize": 0,
+          "focusedWindowShowIcon": true
         }
       ],
       "centerWidgets": [
-        "music",
+        {
+          "id": "music",
+          "enabled": true,
+          "mediaSize": 0
+        },
         {
           "id": "clock",
           "enabled": true,
@@ -102,12 +117,29 @@
           "showInGb": false,
           "minimumWidth": true
         },
-        "battery",
-        "controlCenterButton"
+        {
+          "id": "battery",
+          "enabled": true,
+          "showBatteryPercentOnlyOnBattery": false,
+          "batteryStyle": "icon",
+          "showBatteryTime": false
+        },
+        {
+          "id": "controlCenterButton",
+          "enabled": true,
+          "showAudioPercent": false,
+          "showMicIcon": false,
+          "showBrightnessIcon": false,
+          "showBrightnessPercent": false,
+          "showMicPercent": false,
+          "showPrinterIcon": false,
+          "showBatteryIcon": false,
+          "showIdleInhibitorIcon": false
+        }
       ],
       "spacing": 0,
-      "innerPadding": 0,
-      "barInsetPadding": -1,
+      "innerPadding": 4,
+      "barInsetPadding": 4,
       "barLengthPadding": 0,
       "bottomGap": 0,
       "attachToScreenEdge": false,
@@ -195,5 +227,5 @@
       "trigger": "qrg"
     }
   },
-  "configVersion": 17
+  "configVersion": 18
 }

@@ -50,3 +50,12 @@ window-rule {
     match app-id="^anki$" title="^Edit Current$"
     open-floating true
 }
+
+// @id=wr_1789399415796898898 @name=org.kde.dolphin
+window-rule {
+    match app-id="^org.kde.dolphin$"
+    opacity 0.90
+    background-effect {
+        blur true
+    }
+}
