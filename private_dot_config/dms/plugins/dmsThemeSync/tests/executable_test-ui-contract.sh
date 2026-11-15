@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT=$(cd "$(dirname "$0")/.." && pwd)
+settings="$ROOT/ThemeSyncSettings.qml"
+service="$ROOT/ThemeSyncService.qml"
+
+grep -Fq 'names = ["blue", "purple", "green", "orange", "red", "cyan", "pink", "amber", "coral", "monochrome"]' "$settings"
+grep -Fq 'function selectIconTheme(value, lightMode)' "$settings"
+grep -Fq 'id: iconThemeVerifyTimer' "$settings"
+grep -Fq 'Dux kept ' "$settings"
+grep -Fq 'SettingsData.setIconThemeForMode(value, targetLight)' "$settings"
+grep -Fq 'text: "Separate light and dark themes"' "$settings"
+grep -Fq 'currentValue: root.iconThemeDark' "$settings"
+grep -Fq 'currentValue: root.iconThemeLight' "$settings"
+grep -Fq 'text: "Use " + root.preferredPapirusTheme' "$settings"
+grep -Fq '"discoveredIconThemes": root.discoveredIconThemes' "$service"
+grep -Fq '"folderColorCapability": root.folderColorCapability' "$service"
+grep -Fq '"folderColorReason": root.folderColorReason' "$service"
+grep -Fq '"iconThemePerMode": root.iconThemePerMode' "$service"
+grep -Fq '"folderBaseThemeDark": root.folderBaseThemeDark' "$service"
+grep -Fq '"folderBaseThemeLight": root.folderBaseThemeLight' "$service"
+grep -Fq 'function setIconThemeForMode(themeName, light)' "$service"
+grep -Fq 'pluginData.folderColorBaseThemeLight || pluginData.folderColorBaseTheme' "$service"
+grep -Fq 'function parseFlatpakDiagnostic(text)' "$settings"
+grep -Fq 'text: root.flatpakDiagnosticBusy ? "Checking…" : "Check per-app Flatpak overrides"' "$settings"
+grep -Fq 'nothing was changed.' "$settings"
+
+# DankSlider assigns to its own value while dragging, which replaces the
+# declarative value binding. Reset actions must therefore restore both the
+# visible slider and the backing setting, as Dux SettingsSliderRow does.
+grep -Fq 'matugenContrastSlider.value = 0;' "$settings"
+grep -Fq 'cursorSizeSlider.value = 24;' "$settings"
+grep -Fq 'regularFontSizeSlider.value = 11;' "$settings"
+grep -Fq 'monoFontSizeSlider.value = 12;' "$settings"
+grep -Fq 'documentFontSizeSlider.value = 11;' "$settings"
+grep -Fq 'backupRetentionSlider.value = 10;' "$settings"
+grep -Fq 'text: "Terminal ANSI palette"' "$settings"
+grep -Fq 'text: "Interface style"' "$settings"
+grep -Fq 'text: "Interface density"' "$settings"
+grep -Fq 'function onMatugenCompleted(mode, result)' "$service"
+grep -Fq '"dms21": root.dms21' "$service"
+
+printf 'ui capability contract: ok\n'

@@ -4,12 +4,12 @@ License: GNU GPL, version 3 or later; http://www.gnu.org/licenses/gpl.html
 
 Switch cycles between values in a table.
 ]]
-local h = require('helpers')
+local h = require("helpers")
 
 local make_switch = function(states)
     local self = {
         states = states,
-        current_state = 1
+        current_state = 1,
     }
     local function get()
         return self.states[self.current_state]
@@ -35,7 +35,7 @@ local make_switch = function(states)
         end
     end
     local function set_index(index)
-        self.current_state = math.max(1, math.min(index, #self.states))
+        self.current_state = h.clamp(index, 1, #self.states)
     end
     local function get_index()
         return self.current_state
@@ -59,5 +59,5 @@ local make_switch = function(states)
 end
 
 return {
-    new = make_switch
+    new = make_switch,
 }

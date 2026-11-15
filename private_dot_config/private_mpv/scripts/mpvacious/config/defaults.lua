@@ -23,6 +23,12 @@ this.default_height_px = 350
 -- Measure quality from 0 (worst/lowest) to 100 (best/highest)
 this.default_image_quality = 15
 
+-- Maximum number of wrapped lines shown per recorded subtitle in the menu's second pane.
+-- Values outside this range are clamped during config validation.
+this.min_menu_max_shown_lines = 1
+this.default_menu_max_shown_lines = 1
+this.max_menu_max_shown_lines = 20
+
 this.get_default = function()
     return {
         -- Default config.
@@ -43,9 +49,9 @@ this.get_default = function()
 
         -- Secondary subtitle
         secondary_sub_auto_load = true, -- Automatically load secondary subtitle track when a video file is opened.
-        secondary_sub_lang = 'eng,en,rus,ru,jp,jpn,ja', -- Language of secondary subs that should be automatically loaded.
+        secondary_sub_lang = "eng,en,rus,ru,jp,jpn,ja", -- Language of secondary subs that should be automatically loaded.
         secondary_sub_area = 0.15, -- Hover area. Fraction of the window from the top.
-        secondary_sub_visibility = 'auto', -- One of: 'auto', 'never', 'always'. Controls secondary_sid visibility. Ctrl+V to cycle.
+        secondary_sub_visibility = "auto", -- One of: 'auto', 'never', 'always'. Controls secondary_sid visibility. Ctrl+V to cycle.
 
         -- Snapshots
         snapshot_format = "avif", -- avif, webp or jpg
@@ -73,6 +79,7 @@ this.get_default = function()
         -- Menu
         menu_font_name = "Noto Sans CJK JP",
         menu_font_size = 25,
+        menu_max_shown_lines = this.default_menu_max_shown_lines,
         show_selected_text = true,
 
         -- Make sure to remove loudnorm from ffmpeg_audio_args and mpv_audio_args before enabling.
@@ -87,8 +94,8 @@ this.get_default = function()
         -- Better to remove loudnorm from custom args and enable two-pass loudnorm.
         -- Enabling loudnorm both through the separate switch and through custom args
         -- can lead to unpredictable results.
-        ffmpeg_audio_args = '',
-        mpv_audio_args = '',
+        ffmpeg_audio_args = "",
+        mpv_audio_args = "",
         --ffmpeg_audio_args = '-af loudnorm=I=-16:TP=-1.5:LRA=11:dual_mono=true',
         --mpv_audio_args = '--af-append=loudnorm=I=-16:TP=-1.5:LRA=11:dual_mono=true',
 
@@ -100,13 +107,13 @@ this.get_default = function()
         sentence_field = "SentKanji",
         secondary_field = "SentEng",
         audio_field = "SentAudio",
-        audio_template = '[sound:%s]',
+        audio_template = "[sound:%s]",
         image_field = "Image",
         image_template = '<img alt="snapshot" src="%s">',
         append_media = true, -- True to append video media after existing data, false to insert media before
         disable_gui_browse = false, -- Lets you disable anki browser manipulation by mpvacious.
-        ankiconnect_url = '127.0.0.1:8765',
-        ankiconnect_api_key = '',
+        ankiconnect_url = "127.0.0.1:8765",
+        ankiconnect_api_key = "",
 
         -- Note tagging
         -- The tag(s) added to new notes. Spaces separate multiple tags.

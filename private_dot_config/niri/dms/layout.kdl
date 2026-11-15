@@ -7,16 +7,16 @@ layout {
     gaps 4
 
     border {
-        width 2
+        width 1
     }
 
     focus-ring {
-        width 2
+        width 1
     }
 }
 
 window-rule {
-    geometry-corner-radius 4
+    geometry-corner-radius 2
     clip-to-geometry true
     tiled-state true
     draw-border-with-background false
@@ -30,7 +30,7 @@ layer-rule {
 }
 
 window-rule {
-    match app-id="^com.danklinux.dms$"
+    match app-id="^(dev.duxlabs.shell|com.danklinux.dms|dev.duxlabs.files|dev.duxlabs.calendar)$"
     background-effect {
         xray false
     }

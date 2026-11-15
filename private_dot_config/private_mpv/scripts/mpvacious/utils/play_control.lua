@@ -5,31 +5,31 @@ License: GNU GPL, version 3 or later; http://www.gnu.org/licenses/gpl.html
 Provides additional methods for controlling playback.
 ]]
 
-local mp = require('mp')
-local h = require('helpers')
-local pause_timer = require('utils.pause_timer')
-local Subtitle = require('subtitles.subtitle')
+local mp = require("mp")
+local h = require("helpers")
+local pause_timer = require("utils.pause_timer")
+local subtitle = require("subtitles.subtitle")
 
 local current_sub
 
 local function stop_at_the_end(sub)
-    pause_timer.set_stop_time(sub['end'] - 0.050)
+    pause_timer.set_stop_time(sub["end"] - 0.050)
     h.notify("Playing till the end of the sub...", "info", 3)
 end
 
 local function play_till_sub_end()
-    local sub = Subtitle:now()
+    local sub = subtitle.make_current()
     if sub == nil then
         h.notify("No subtitle is currently playing", "error", 5)
         return
     end
-    mp.commandv('seek', sub['start'], 'absolute')
+    mp.commandv("seek", sub["start"], "absolute")
     mp.set_property("pause", "no")
     stop_at_the_end(sub)
 end
 
 local function sub_seek(direction, pause)
-    mp.commandv("sub_seek", direction == 'backward' and '-1' or '1')
+    mp.commandv("sub_seek", direction == "backward" and "-1" or "1")
     mp.commandv("seek", "0.015", "relative+exact")
     if pause then
         mp.set_property("pause", "yes")
@@ -38,17 +38,17 @@ local function sub_seek(direction, pause)
 end
 
 local function sub_rewind()
-    local sub = Subtitle:now()
+    local sub = subtitle.make_current()
     if sub == nil then
         h.notify("No subtitle is currently visible", "error", 5)
         return
     end
-    mp.commandv('seek', sub['start'] + 0.015, 'absolute')
+    mp.commandv("seek", sub["start"] + 0.015, "absolute")
     pause_timer.stop()
 end
 
 local function check_sub()
-    local sub = Subtitle:now()
+    local sub = subtitle.make_current()
     if sub and sub ~= current_sub then
         mp.unobserve_property(check_sub)
         stop_at_the_end(sub)
@@ -56,7 +56,7 @@ local function check_sub()
 end
 
 local function play_till_next_sub_end()
-    current_sub = Subtitle:now()
+    current_sub = subtitle.make_current()
     mp.observe_property("sub-text", "string", check_sub)
     mp.set_property("pause", "no")
     h.notify("Waiting till next sub...", "info", 10)

@@ -5,21 +5,96 @@ License: GNU GPL, version 3 or later; http://www.gnu.org/licenses/gpl.html
 AnkiConnect requests
 ]]
 
-local utils = require('mp.utils')
-local msg = require('mp.msg')
-local h = require('helpers')
-local platform = require('platform.init')
+local utils = require("mp.utils")
+local msg = require("mp.msg")
+local h = require("helpers")
+local platform = require("platform.init")
 
-local function make_ankiconnect()
+--- Extract plain fields from one notesInfo item without mutating it.
+--- Missing notes/fields are errors, but an empty string is a valid field value.
+local function extract_note_fields(raw_fields, note_id)
+    if type(raw_fields) ~= "table" or h.is_empty(raw_fields) then
+        return nil, string.format("AnkiConnect returned no fields for note %s", tostring(note_id))
+    end
+    local fields = {}
+    for name, field in pairs(raw_fields) do
+        if type(field) ~= "table" or type(field.value) ~= "string" then
+            return nil, string.format("AnkiConnect returned invalid fields for note %s", tostring(note_id))
+        end
+        fields[name] = field.value
+    end
+    return fields, nil
+end
+
+--- Decode notesInfo items and verify every requested note ID is present.
+local function decode_note_fields(result, note_ids)
+    if type(result) ~= "table" or h.is_empty(result) then
+        return nil, "AnkiConnect returned no requested notes"
+    end
+    local fields_by_note_id = {}
+    for _, note_info in pairs(result) do
+        if type(note_info) ~= "table" or note_info.noteId == nil then
+            return nil, "AnkiConnect returned note fields without a note ID"
+        end
+        local fields, error = extract_note_fields(note_info.fields, note_info.noteId)
+        if error then
+            return nil, error
+        end
+        fields_by_note_id[note_info.noteId] = fields
+    end
+    -- Prove the snapshot is complete independently of AnkiConnect's response order.
+    for _, note_id in pairs(note_ids) do
+        if fields_by_note_id[note_id] == nil then
+            return nil, string.format("AnkiConnect returned no fields for note %s", tostring(note_id))
+        end
+    end
+    return fields_by_note_id, nil
+end
+
+--- Decode the first model field without assuming a successful lookup found a model.
+local function decode_first_field(result, model_name)
+    local error = string.format("AnkiConnect returned no valid first field for note type %s", model_name)
+    if type(result) ~= "table" or type(result[1]) ~= "table" then
+        return nil, error
+    end
+    local fields = result[1].flds
+    if type(fields) ~= "table" then
+        return nil, error
+    end
+    for _, field in pairs(fields) do
+        if type(field) == "table" and field.ord == 0 and h.is_non_empty_str(field.name) then
+            return field.name, nil
+        end
+    end
+    return nil, error
+end
+
+--- Create an AnkiConnect client for note and media requests.
+local function make_ankiconnect(components)
+    components = components or {}
+    local logger = components.logger or msg
+    local platform_api = components.platform or platform
     local self = {}
+
+    --- Return the active configuration.
+    local function config()
+        return self.cfg_mgr.config()
+    end
+
+    local function get_request_key()
+        if h.is_non_empty_str(config().ankiconnect_api_key) then
+            return config().ankiconnect_api_key
+        else
+            return nil
+        end
+    end
 
     --- Parameters: request, completion_fn, suppress_log
     --- completion_fn = fn(success, result, error)
     --- https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst#mp-functions
     self.execute = function(o)
-        if not h.is_empty(self.config.ankiconnect_api_key) then
-            o.request.key = self.config.ankiconnect_api_key
-        end
+        o.request = h.shallow_copy(o.request) -- defensive: copy request to avoid mutations
+        o.request.key = get_request_key()
 
         -- utils.format_json returns a string
         -- On error, request_json will contain "null", not nil.
@@ -28,8 +103,8 @@ local function make_ankiconnect()
         if error ~= nil or request_json == "null" then
             return o.completion_fn and o.completion_fn()
         else
-            return platform.json_curl_request {
-                url = self.config.ankiconnect_url,
+            return platform_api.json_curl_request {
+                url = config().ankiconnect_url,
                 request_json = request_json,
                 completion_fn = o.completion_fn,
                 suppress_log = o.suppress_log,
@@ -82,6 +157,7 @@ local function make_ankiconnect()
         end
     end
 
+    --- Return the Anki media directory, or an error when it cannot be retrieved.
     self.get_media_dir_path = function()
         -- Ask AnkiConnect where to store media files.
         -- If AnkiConnect isn't running, returns nil.
@@ -91,12 +167,13 @@ local function make_ankiconnect()
         }
         local ret = self.execute { request = request }
         local dir_path, error = self.parse_result(ret)
-        if not error then
-            return dir_path
-        else
-            msg.error(string.format("Couldn't retrieve path to collection.media folder: %s", error))
-            return nil
+        if error then
+            return nil, error
         end
+        if not h.is_non_empty_str(dir_path) then
+            return nil, "AnkiConnect returned no media directory"
+        end
+        return dir_path, nil
     end
 
     self.create_deck = function(deck_name)
@@ -105,8 +182,8 @@ local function make_ankiconnect()
             version = 6,
             params = {
                 cards = {},
-                deck = deck_name
-            }
+                deck = deck_name,
+            },
         }
         local result_notify = function(_, error)
             if not error then
@@ -118,26 +195,30 @@ local function make_ankiconnect()
         self.execute { request = args, completion_fn = self.make_result_parser_async(result_notify) }
     end
 
-    self.add_note = function(note_fields, tag, gui)
-        -- https://git.sr.ht/~foosoft/anki-connect#codeaddnotecode
-        -- "result" is integer
-        local action = gui and 'guiAddCards' or 'addNote'
-        local args = {
-            action = action,
+    --- Build the add-note payload from a captured export job.
+    local function make_add_note_request(job)
+        return {
+            action = job.gui and "guiAddCards" or "addNote",
             version = 6,
             params = {
                 note = {
-                    deckName = self.config.deck_name,
-                    modelName = self.config.model_name,
-                    fields = note_fields,
+                    deckName = config().deck_name,
+                    modelName = config().model_name,
+                    fields = job.note_fields,
                     options = {
-                        allowDuplicate = self.config.allow_duplicates,
+                        allowDuplicate = config().allow_duplicates,
                         duplicateScope = "deck",
                     },
-                    tags = h.is_empty(tag) and {} or { tag, },
-                }
-            }
+                    tags = h.is_empty(job.tag) and {} or { job.tag },
+                },
+            },
         }
+    end
+
+    --- Add captured note_fields, tag, and gui mode using this client's configuration.
+    self.add_note = function(job)
+        -- https://git.sr.ht/~foosoft/anki-connect#codeaddnotecode
+        -- "result" is integer
         local result_notify = function(note_id, error)
             if not error then
                 h.notify(string.format("Note added. ID = %s.", note_id))
@@ -146,7 +227,10 @@ local function make_ankiconnect()
                 h.notify(string.format("Error: %s.", error), "error", 2)
             end
         end
-        self.execute { request = args, completion_fn = self.make_result_parser_async(result_notify) }
+        self.execute {
+            request = make_add_note_request(job),
+            completion_fn = self.make_result_parser_async(result_notify),
+        }
     end
 
     --- Parameters; query, completion_fn, suppress_log
@@ -157,19 +241,19 @@ local function make_ankiconnect()
             action = "findNotes",
             version = 6,
             params = {
-                query = o.query
-            }
+                query = o.query,
+            },
         }
         if o.completion_fn then
             return self.execute {
                 request = request,
-                suppress_log = (not not o.suppress_log),
-                completion_fn = self.make_result_parser_async(o.completion_fn)
+                suppress_log = not not o.suppress_log,
+                completion_fn = self.make_result_parser_async(o.completion_fn),
             }
         else
             return self.parse_result(self.execute {
                 request = request,
-                suppress_log = (not not o.suppress_log)
+                suppress_log = not not o.suppress_log,
             })
         end
     end
@@ -186,7 +270,7 @@ local function make_ankiconnect()
     self.get_selected_note_ids = function()
         local request = {
             action = "guiSelectedNotes",
-            version = 6
+            version = 6,
         }
         local ret = self.execute { request = request }
 
@@ -194,61 +278,66 @@ local function make_ankiconnect()
         return note_ids
     end
 
-    self.get_note_fields = function(note_id)
+    --- Return note fields keyed by note ID, or an AnkiConnect error.
+    --- https://git.sr.ht/~foosoft/anki-connect/tree/master/item/README.md#codenotesinfocode
+    self.get_notes_fields = function(note_ids)
         local request = {
             action = "notesInfo",
             version = 6,
             params = {
-                notes = { note_id }
-            }
+                notes = note_ids,
+            },
         }
         local ret = self.execute { request = request }
 
         local result, error = self.parse_result(ret)
 
-        if error == nil then
-            result = result[1].fields
-            for key, value in pairs(result) do
-                result[key] = value.value
-            end
-            return result
-        else
-            return nil
+        if error ~= nil then
+            return nil, error
         end
+        local fields_by_note_id, fields_error = decode_note_fields(result, note_ids)
+        if fields_error then
+            return nil, fields_error
+        end
+        return fields_by_note_id, nil
     end
 
+    --- Return (fields, nil) on success or (nil, error) when one note cannot be read.
+    self.get_note_fields = function(note_id)
+        local fields_by_note_id, error = self.get_notes_fields({ note_id })
+        if error then
+            return nil, error
+        end
+        return fields_by_note_id[note_id], nil
+    end
+
+    --- Return the first model field's name or a lookup/response error.
     self.get_first_field = function(model_name)
         local request = {
             action = "findModelsByName",
             version = 6,
             params = {
-                modelNames = { model_name }
-            }
+                modelNames = { model_name },
+            },
         }
         local ret = self.execute { request = request }
         local result, error = self.parse_result(ret)
 
-        if error == nil then
-            for _, field in pairs(result[1].flds) do
-                if field.ord == 0 then
-                    return field.name
-                end
-            end
-        else
-            msg.error(string.format("Couldn't retrieve the first field's name of note type %s: %s", model_name, error))
-            return nil
+        if error then
+            return nil, error
         end
+        return decode_first_field(result, model_name)
     end
 
     self.gui_browse = function(query)
         --- query is a string, e.g. "deck:current", "nid:12345"
-        if not self.config.disable_gui_browse then
+        if not config().disable_gui_browse then
             local request = {
-                action = 'guiBrowse',
+                action = "guiBrowse",
                 version = 6,
                 params = {
-                    query = query
-                }
+                    query = query,
+                },
             }
             self.execute { request = request }
         end
@@ -257,12 +346,12 @@ local function make_ankiconnect()
     self.add_tag = function(note_id, tag)
         if not h.is_empty(tag) then
             local request = {
-                action = 'addTags',
+                action = "addTags",
                 version = 6,
                 params = {
                     notes = { note_id },
-                    tags = tag
-                }
+                    tags = tag,
+                },
             }
             self.execute { request = request }
         end
@@ -281,30 +370,39 @@ local function make_ankiconnect()
                 note = {
                     id = note_id,
                     fields = fields,
-                }
-            }
+                },
+            },
         }
 
-        local on_finish_wrap = function(_, error)
+        --- Tag successful writes and forward their result/error to the batch collector.
+        local on_finish_wrap = function(result, error)
             if not error then
                 self.add_tag(note_id, tag)
             else
-                h.notify(string.format("Error: %s.", error), "error", 2)
+                -- The update context reports combined write errors after all targets finish.
+                logger.error(string.format("Failed to update note %s: %s", tostring(note_id), tostring(error)))
             end
-            on_finish_fn(error)
+            on_finish_fn(result, error)
         end
 
         self.execute { request = request, completion_fn = self.make_result_parser_async(on_finish_wrap) }
     end
 
+    --- Initialize this client with its live or transaction-local configuration provider.
     self.init = function(cfg_mgr)
-        cfg_mgr.fail_if_not_ready()
-        self.config = cfg_mgr.config()
+        self.cfg_mgr = cfg_mgr
+        self.cfg_mgr.fail_if_not_ready()
+        return self
+    end
+
+    --- Create a fresh client with a supplied configuration and the same I/O dependencies.
+    self.new = function(cfg_mgr)
+        return make_ankiconnect(components).init(cfg_mgr)
     end
 
     return self
 end
 
 return {
-    new = make_ankiconnect
+    new = make_ankiconnect,
 }

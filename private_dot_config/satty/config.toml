@@ -2,11 +2,25 @@
 # Exit directly after copy / save action.
 early-exit = true
 
-# Ensure it doesn't trigger a disk save after copying to the clipboard
-save-after-copy = false
-# Ensure clipboard contents persist after satty closes.
-copy-command = "wl-copy --type image/png"
+# Disable rounded corners on rectangles
+corner-roundness = 0
 
 # Select the tool on startup:
 #   pointer, crop, line, arrow, rectangle, text, marker, blur, brush
-initial-tool = "brush"
+initial-tool = "rectangle"
+
+# Ensure clipboard contents persist after satty closes.
+copy-command = "wl-copy --type image/png"
+# Ensure it doesn't trigger a disk save after copying to the clipboard
+save-after-copy = false
+
+# Fill shapes by default
+default-fill-shapes = true
+
+# Actions to trigger on Enter key (order is important)
+# [possible values: save-to-clipboard, save-to-file, save-to-file-as, copy-filepath-to-clipboard, exit]
+actions-on-enter = ["save-to-file"]
+# Actions to trigger on Escape key (order is important)
+# [possible values: save-to-clipboard, save-to-file, save-to-file-as, copy-filepath-to-clipboard, exit]
+actions-on-escape = ["exit"]
+

@@ -123,9 +123,11 @@ alias \
 	mkdir="mkdir -pv" \
 	ffmpeg="ffmpeg -hide_banner" \
 	:q="exit" \
-	help="man" \
+	help="tldr" \
 	chd='cd -- "$(choose_from_cwds)" && ls -a' \
 	rclone="rclone -v" \
+
+# tldr is tealdeer package
 
 # Remove subtitle lines repetition from youtube automatic subs
 convertautosubs() {
@@ -173,10 +175,11 @@ alias music="ncmpcpp"
 # alias subs='cd -- "/mnt/archive/langs/Japanese/kitsunekko-mirror/subtitles/"'
 # Condense audio
 alias audiocond='subs2cia condense -ae opus --no-gen-subtitle -p 100'
-# Ctrl+O to launch lf file manager.
-bindkey -s '^o' '^ulf\n'
+
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
 # Ctrl+F to search directory with fzf.
-bindkey -s '^f' '^ucd -- "$(dirname -- "$(fzf)")"\n'
+# bindkey -s '^f' '^ucd -- "$(dirname -- "$(fzf)")"\n'
 
 # Pacman/System
 
@@ -205,6 +208,8 @@ alias \
 
 # Flag for reflector
 # --country "$(curl -Ls "ifconfig.co/country")"
+
+alias niriconf="nvim ~/.config/niri/config.kdl"
 
 fpath+=~/.zfunc; autoload -Uz compinit; compinit
 eval "$(zoxide init zsh)"

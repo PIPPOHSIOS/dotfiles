@@ -5,211 +5,244 @@ License: GNU GPL, version 3 or later; http://www.gnu.org/licenses/gpl.html
 Encoder that uses mpv to create media files.
 ]]
 
-local mp = require('mp')
-local codec_support = require('encoder.codec_support')
-local h = require('helpers')
-local eutils = require('encoder.utils')
-local exec = require('encoder.executables')
+local mp = require("mp")
+local codec_support = require("encoder.codec_support")
+local h = require("helpers")
+local eutils = require("encoder.utils")
+local exec = require("encoder.executables")
 
-local function make_mpv_encoder(cfg_mgr)
-    local self = { }
+--- Create an mpv backend with optional codec support and isolated I/O dependencies.
+local function make_mpv_encoder(cfg_mgr, support, components)
+    support = support or codec_support
+    components = components or {}
+    local subprocess = components.subprocess or h.subprocess
+    local get_active_track = components.get_active_track or h.get_active_track
+    local mp_api = components.mp or mp
+    local logger = components.logger or mp.msg
+    local self = {}
+    local public = {}
+
+    ------------------------------------------------------------
+    --- Private
+
     self.cfg_mgr = cfg_mgr
-    self.config = cfg_mgr.config()
 
-    self.choose_avif_encoder = function()
-        for _, codec_name in ipairs(codec_support.avif_encoders) do
-            if codec_support.mpv_support['snapshot'][codec_name] then
+    --- Select the first supported AVIF encoder for private codec initialization.
+    function self.choose_avif_encoder()
+        for _, codec_name in ipairs(support.avif_encoders) do
+            if support.mpv_support["snapshot"][codec_name] then
                 return codec_name
             end
         end
         return nil
     end
 
-    self.set_avif_encoder = function()
-        local chosen = self.choose_avif_encoder()
-        if h.is_empty(chosen) then
-            return
-        end
-        if self.config.snapshot_format == 'avif' then
-            self.config.snapshot_codec = chosen
-        end
-        if self.config.animated_snapshot_format == 'avif' then
-            self.config.animated_snapshot_codec = chosen
-        end
+    --- Return the active encoding configuration.
+    local function config()
+        return self.cfg_mgr.config()
     end
 
-    self.prepend_common_args = function(source_path, ...)
+    --- Prepend private mpv process arguments for the supplied source.
+    local function prepend_common_args(source_path, ...)
         return {
             exec.mpv,
             source_path,
-            '--no-config',
-            '--loop-file=no',
-            '--keep-open=no',
-            '--no-sub',
-            '--no-ocopy-metadata',
+            "--no-config",
+            "--loop-file=no",
+            "--keep-open=no",
+            "--no-sub",
+            "--no-ocopy-metadata",
             ...,
         }
     end
 
-    self.make_static_snapshot_args = function(source_path, output_path, timestamp)
-        local encoder_args
-        if self.config.snapshot_format == 'avif' then
-            encoder_args = {
-                '--ovc=' .. self.config.snapshot_codec,
-                -- cpu-used < 6 can take a lot of time to encode.
-                '--ovcopts-add=cpu-used=6',
-                string.format('--ovcopts-add=crf=%d', eutils.quality_to_crf_avif(self.config.snapshot_quality)),
-                '--ovcopts-add=still-picture=1',
-            }
-        elseif self.config.snapshot_format == 'webp' then
-            encoder_args = {
-                '--ovc=' .. self.config.snapshot_codec,
-                '--ovcopts-add=compression_level=6',
-                string.format('--ovcopts-add=quality=%d', self.config.snapshot_quality),
+    --- Build shared AVIF options and enable still-picture mode only for static snapshots.
+    local function make_avif_encoder_args(codec, quality, still_picture)
+        local args = {
+            "--ovc=" .. codec,
+            -- cpu-used < 6 can take a lot of time to encode.
+            "--ovcopts-add=cpu-used=6",
+            string.format("--ovcopts-add=crf=%d", eutils.quality_to_crf_avif(quality)),
+        }
+        if still_picture then
+            table.insert(args, "--ovcopts-add=still-picture=1")
+        end
+        return args
+    end
+
+    --- Build codec and quality arguments for the configured static image format.
+    local function make_encoder_args()
+        if config().snapshot_format == "avif" then
+            return make_avif_encoder_args(self.snapshot_codec, config().snapshot_quality, true)
+        elseif config().snapshot_format == "webp" then
+            return {
+                "--ovc=" .. self.snapshot_codec,
+                "--ovcopts-add=compression_level=6",
+                string.format("--ovcopts-add=quality=%d", config().snapshot_quality),
             }
         else
-            encoder_args = {
-                '--ovc=' .. self.config.snapshot_codec,
-                '--vf-add=scale=out_range=jpeg',
+            return {
+                "--ovc=" .. self.snapshot_codec,
+                "--vf-add=scale=out_range=jpeg",
                 string.format(
-                        '--ovcopts=global_quality=%d*QP2LAMBDA,flags=+qscale',
-                        eutils.quality_to_jpeg_qscale(self.config.snapshot_quality)
+                    "--ovcopts=global_quality=%d*QP2LAMBDA,flags=+qscale",
+                    eutils.quality_to_jpeg_qscale(config().snapshot_quality)
                 ),
             }
         end
-
-        return self.prepend_common_args(
-                source_path,
-                '--audio=no',
-                '--frames=1',
-                '--start=' .. eutils.toms(timestamp),
-                string.format('--vf-add=lavfi=[%s]', eutils.static_scale_filter(self.config)),
-                '-o=' .. output_path,
-                h.unpack(encoder_args)
-        )
     end
 
-    self.make_animated_snapshot_args = function(source_path, output_path, start_timestamp, end_timestamp)
-        local encoder_args
-        if self.config.animated_snapshot_format == 'avif' then
-            encoder_args = {
-                '--ovc=' .. self.config.animated_snapshot_codec,
-                -- cpu-used < 6 can take a lot of time to encode.
-                '--ovcopts-add=cpu-used=6',
-                string.format('--ovcopts-add=crf=%d', eutils.quality_to_crf_avif(self.config.animated_snapshot_quality)),
-            }
+    --- Build codec and quality arguments for the configured animated image format.
+    local function make_animated_encoder_args()
+        if config().animated_snapshot_format == "avif" then
+            return make_avif_encoder_args(self.animated_snapshot_codec, config().animated_snapshot_quality, false)
         else
-            encoder_args = {
-                '--ovc=' .. self.config.animated_snapshot_codec,
-                '--ovcopts-add=compression_level=6',
-                string.format('--ovcopts-add=quality=%d', self.config.animated_snapshot_quality),
+            return {
+                "--ovc=" .. self.animated_snapshot_codec,
+                "--ovcopts-add=compression_level=6",
+                string.format("--ovcopts-add=quality=%d", config().animated_snapshot_quality),
             }
         end
+    end
 
-        return self.prepend_common_args(
-                source_path,
-                '--audio=no',
-                '--start=' .. eutils.toms(start_timestamp),
-                '--end=' .. eutils.toms(end_timestamp),
-                '--ofopts-add=loop=0',
-                string.format('--vf-add=fps=%d', self.config.animated_snapshot_fps),
-                string.format('--vf-add=lavfi=[%s]', eutils.animated_scale_filter(self.config)),
-                '-o=' .. output_path,
-                h.unpack(encoder_args)
+    --- Build static snapshot selection, scaling, and destination arguments.
+    local function make_additional_args(track, output_path, timestamp)
+        local additional_args = {}
+        if track and track.albumart == true then
+            table.insert(additional_args, "--vid=" .. tostring(track.id or "auto"))
+        else
+            table.insert(additional_args, "--start=" .. eutils.toms(timestamp))
+        end
+        table.insert(additional_args, string.format("--vf-add=lavfi=[%s]", eutils.static_scale_filter(config())))
+        table.insert(additional_args, "-o=" .. output_path)
+        return additional_args
+    end
+
+    --- Build audio arguments using the captured source, track, and timing window.
+    local function make_audio_mpvargs(source_path, audio_track_id, sub, ...)
+        local args = prepend_common_args(
+            source_path,
+            "--video=no",
+            "--aid=" .. audio_track_id,
+            "--audio-channels=mono",
+            "--start=" .. eutils.toms(sub["start"]),
+            "--end=" .. eutils.toms(sub["end"]),
+            string.format("--volume=%d", config().tie_volumes and mp_api.get_property("volume") or 100),
+            ...
+        )
+        for arg in string.gmatch(config().mpv_audio_args, "%S+") do
+            table.insert(args, arg)
+        end
+        return args
+    end
+
+    ------------------------------------------------------------
+    --- Public
+
+    --- Refresh backend-local codecs without modifying configuration.
+    public.init = function()
+        eutils.set_codecs(self, config())
+    end
+
+    --- Build a static snapshot, selecting attached cover art without a timestamp seek.
+    public.make_static_snapshot_args = function(source_path, output_path, timestamp, track)
+        return h.join_lists(
+            prepend_common_args(source_path, "--audio=no", "--frames=1"),
+            make_additional_args(track, output_path, timestamp),
+            make_encoder_args()
         )
     end
 
-    self.make_audio_args = function(source_path, output_path,
-                                    start_timestamp, end_timestamp, args_consumer)
-        local audio_track = h.get_active_track('audio')
-        local audio_track_id = mp.get_property("aid")
+    --- Build the command for an animated snapshot using initialized codecs.
+    public.make_animated_snapshot_args = function(source_path, output_path, start_timestamp, end_timestamp)
+        return prepend_common_args(
+            source_path,
+            "--audio=no",
+            "--start=" .. eutils.toms(start_timestamp),
+            "--end=" .. eutils.toms(end_timestamp),
+            "--ofopts-add=loop=0",
+            string.format("--vf-add=fps=%d", config().animated_snapshot_fps),
+            string.format("--vf-add=lavfi=[%s]", eutils.animated_scale_filter(config())),
+            "-o=" .. output_path,
+            h.unpack(make_animated_encoder_args())
+        )
+    end
+
+    --- Build audio arguments and deliver them after optional loudness analysis.
+    public.make_audio_args = function(source_path, output_path, sub, args_consumer)
+        local audio_track = get_active_track("audio")
+        local audio_track_id = mp_api.get_property("aid")
 
         if audio_track and audio_track.external == true then
-            source_path = audio_track['external-filename']
-            audio_track_id = 'auto'
+            source_path = audio_track["external-filename"]
+            audio_track_id = "auto"
         end
 
-        local function make_mpvargs(...)
-            local args = self.prepend_common_args(
-                    source_path,
-                    '--video=no',
-                    '--aid=' .. audio_track_id,
-                    '--audio-channels=mono',
-                    '--start=' .. eutils.toms(start_timestamp),
-                    '--end=' .. eutils.toms(end_timestamp),
-                    string.format(
-                            '--volume=%d',
-                            self.config.tie_volumes and mp.get_property('volume') or 100
-                    ),
-                    ...
-            )
-            for arg in string.gmatch(self.config.mpv_audio_args, "%S+") do
-                table.insert(args, arg)
-            end
-            return args
-        end
-
+        --- Deliver the final audio command with configured codec and normalization options.
         local function make_encoding_args(loudnorm_args)
             local encoder_args
-            if self.config.audio_format == 'opus' then
+            if config().audio_format == "opus" then
                 encoder_args = {
-                    '--oac=' .. self.config.audio_codec,
-                    '--oacopts-add=application=voip',
-                    '--oacopts-add=apply_phase_inv=0', -- Improves mono audio.
+                    "--oac=" .. config().audio_codec,
+                    "--oacopts-add=application=voip",
+                    "--oacopts-add=apply_phase_inv=0", -- Improves mono audio.
                 }
-                if self.config.opus_container == 'm4a' then
-                    table.insert(encoder_args, '--of=mp4')
+                if config().opus_container == "m4a" then
+                    table.insert(encoder_args, "--of=mp4")
                 end
             else
                 -- https://wiki.hydrogenaud.io/index.php?title=LAME#Recommended_encoder_settings:
                 -- "For very low bitrates, up to 100kbps, ABR is most often the best solution."
                 encoder_args = {
-                    '--oac=' .. self.config.audio_codec,
-                    '--oacopts-add=compression_level=0',
-                    '--oacopts-add=abr=1',
+                    "--oac=" .. config().audio_codec,
+                    "--oacopts-add=compression_level=0",
+                    "--oacopts-add=abr=1",
                 }
             end
 
-            local args = make_mpvargs(
-                    '--oacopts-add=b=' .. self.config.audio_bitrate,
-                    '-o=' .. output_path,
-                    h.unpack(encoder_args)
+            local args = make_audio_mpvargs(
+                source_path,
+                audio_track_id,
+                sub,
+                "--oacopts-add=b=" .. config().audio_bitrate,
+                "-o=" .. output_path,
+                h.unpack(encoder_args)
             )
             if loudnorm_args then
-                table.insert(args, '--af-append=' .. loudnorm_args)
+                table.insert(args, "--af-append=" .. loudnorm_args)
             end
             args_consumer(args)
         end
 
-        if not self.config.loudnorm then
+        if not config().loudnorm then
             make_encoding_args(nil)
             return
         end
 
-        local loudnorm_targets = eutils.make_loudnorm_targets(self.config)
-        h.subprocess {
-            args = make_mpvargs(
-                    '-v',
-                    '--af-append=' .. loudnorm_targets .. ':print_format=json',
-                    '--ao=null',
-                    '--of=null'
+        local loudnorm_targets = eutils.make_loudnorm_targets(config())
+        subprocess {
+            args = make_audio_mpvargs(
+                source_path,
+                audio_track_id,
+                sub,
+                "-v",
+                "--af-append=" .. loudnorm_targets .. ":print_format=json",
+                "--ao=null",
+                "--of=null"
             ),
-            completion_fn = eutils.parse_loudnorm(
-                    loudnorm_targets,
-                    function(stdout, _) -- function takes stdout, stderr
-                        local _, _, json = string.find(stdout, '%[ffmpeg%] ({.-})') -- returns: start, stop, json
-                        if json then
-                            json = string.gsub(json, '%[ffmpeg%]', '')
-                            mp.msg.info("json: " .. tostring(json))
-                        end
-                        return json
-                    end,
-                    make_encoding_args
-            )
+            completion_fn = eutils.parse_loudnorm(loudnorm_targets, function(stdout, _)
+                -- function takes stdout, stderr
+                local _, _, json = string.find(stdout, "%[ffmpeg%] ({.-})") -- returns: start, stop, json
+                if json then
+                    json = string.gsub(json, "%[ffmpeg%]", "")
+                    logger.info("json: " .. tostring(json))
+                end
+                return json
+            end, make_encoding_args, components),
         }
     end
 
-    return self
+    return public
 end
 
 return {

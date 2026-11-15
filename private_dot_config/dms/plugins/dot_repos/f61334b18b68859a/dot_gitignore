@@ -1,0 +1,10 @@
+.DS_Store
+*.pyc
+__pycache__/
+.vscode/
+.idea/
+*.swp
+*.bak
+*~
+.bump-summary.txt
+.bump-release-notes.md

@@ -5,68 +5,144 @@ License: GNU GPL, version 3 or later; http://www.gnu.org/licenses/gpl.html
 Subtitle list remembers selected subtitle lines.
 ]]
 
-local h = require('helpers')
-local CONCAT_CHR = '\n' -- character used to concatenate subtitle lines
+local h = require("helpers")
+local subtitle = require("subtitles.subtitle")
+local speech_collector = require("subtitles.collector")
+local LOOKUP_WINDOW_SIZE = 25 -- how many recent subs to scan for duplicate events
+local MAX_SUB_GAP_SECONDS = 20 -- stop joining lines separated by a longer gap
+local SHORT_SUB_SECONDS = 1
+local MIN_SUB_OVERLAP_RATIO = 0.5
+local MIN_SHORT_SUB_OVERLAP_RATIO = 0.75
 
-local new_sub_list = function()
+--- Collapse whitespace in collected subtitle text.
+local function flatten_subtitle_text(text)
+    return h.remove_leading_trailing_spaces(h.collapse_whitespace(text))
+end
+
+--- Return the minimum overlap ratio for the shorter subtitle.
+local function required_overlap_ratio(shorter_duration)
+    if shorter_duration < SHORT_SUB_SECONDS then
+        return MIN_SHORT_SUB_OVERLAP_RATIO
+    end
+    return MIN_SUB_OVERLAP_RATIO
+end
+
+--- Check that two subtitle windows overlap beyond timing noise.
+local function overlaps_enough(sub, window)
+    local shorter_duration = math.min(sub:duration(), window:duration())
+    return shorter_duration > 0
+        and sub:overlap_duration(window) >= shorter_duration * required_overlap_ratio(shorter_duration)
+end
+
+--- Create an ordered collection of selected subtitles.
+local function make_sub_list()
     local subs_list = {}
+    local public = {}
 
-    local get_time = function(position)
-        local i = position == 'start' and 1 or #subs_list
-        return subs_list[i][position]
-    end
-    local get_text = function()
-        local speech = {}
-        for _, sub in ipairs(subs_list) do
-            table.insert(speech, sub['text'])
+    --- Return the start or end time of the selected subtitles.
+    function public.get_time(position)
+        if position == "start" then
+            return subs_list[1][position]
         end
-        return table.concat(speech, CONCAT_CHR)
+        return subs_list[#subs_list][position]
     end
-    local get_n_text = function(sub, n_lines)
-        local speech = {}
-        local end_sub = sub
-        for _, v in ipairs(subs_list) do
-            if v['start'] - end_sub['end'] >= 20 then
+    --- Return collected subtitle text with adjacent boundary lines deduplicated.
+    function public.get_text()
+        -- Dedup applies to every list (primary, secondary), collapsing adjacent
+        -- multiline sub expansions into one continuous dialog string.
+        local collector = speech_collector.new()
+        for _, sub in ipairs(subs_list) do
+            collector.append_sub(sub)
+        end
+        return collector.get_all_as_string()
+    end
+    --- Collect up to n_subs cues starting from start_sub and return them as one Subtitle
+    --- spanning from start_sub's start to the last collected cue's end. Collection stops
+    --- early at the first gap of MAX_SUB_GAP_SECONDS or more between consecutive cues.
+    --- Text is joined by the speech collector, which removes boundary line overlap
+    --- between consecutive time-overlapping cues.
+    function public.collect_n_subs(start_sub, n_subs)
+        local collector = speech_collector.new()
+        local end_sub = start_sub
+        local collected_count = 0
+        for _, sub in ipairs(subs_list) do
+            if sub["start"] - end_sub["end"] >= MAX_SUB_GAP_SECONDS then
                 break
             end
-            if v >= sub and #speech < n_lines then
-                table.insert(speech, v['text'])
-                end_sub = v
+            if not (sub < start_sub) and collected_count < n_subs then
+                collector.append_sub(sub)
+                end_sub = sub
+                collected_count = collected_count + 1
             end
         end
-        return table.concat(speech, CONCAT_CHR), end_sub
+        return subtitle.make_subtitle(collector.get_all_as_string(), start_sub["start"], end_sub["end"])
     end
-    local insert = function(sub)
+
+    --- Return the text of all subs overlapping the given time window, as one line.
+    --- Used to align secondary (translation) text with the primary text's time span:
+    --- primary and secondary cues have independent timings, so collecting secondary
+    --- text by line count or by the currently visible cue would misalign it with the
+    --- primary text. Small boundary intersections are treated as timing noise.
+    --- Boundary overlap between consecutive cues is removed by the speech collector,
+    --- and the result is flattened to a single whitespace-collapsed, trimmed line.
+    --- `window` is the selected primary Subtitle. Normal cues must overlap at least
+    --- half of the shorter cue; cues shorter than one second must overlap by 75%.
+    function public.get_overlapping_text(window)
+        local collector = speech_collector.new()
+        for _, sub in ipairs(subs_list) do
+            if overlaps_enough(sub, window) then
+                collector.append_sub(sub)
+            end
+        end
+        return flatten_subtitle_text(collector.get_all_as_string())
+    end
+
+    -- Event-level guard and expansion.
+    -- The same sub event is offered repeatedly (on every sub change and on
+    -- every collect call); exact duplicates (same text and timing) are skipped.
+    -- An adjacent same-text event (overlapping or touching in time) expands
+    -- the last recorded sub's end time.
+    -- Text-overlap cleanup for multiline expansion is intentionally delayed
+    -- until get_text()/collect_n_subs(), where the selected output window is known.
+    --- Insert a subtitle, skipping duplicate events and expanding adjacent ones.
+    function public.insert(sub)
         if sub == nil or h.is_empty(sub.text) then
             return false
         end
-        local lookup_window_size = 25
-        local n_latest_subs = {h.unpack(subs_list, math.max(#subs_list - lookup_window_size, 1), #subs_list)}
-        if h.contains(n_latest_subs, sub) then
-            return false
+        local n_latest_subs = h.itable_slice(subs_list, -LOOKUP_WINDOW_SIZE)
+        for _, existing in ipairs(n_latest_subs) do
+            if existing:is_same_event(sub) then
+                return false
+            end
+        end
+        -- Expand only the last stored sub.
+        -- The last sub has no successor, so extending its end time cannot break sorted order.
+        local last_sub = subs_list[#subs_list]
+        if last_sub and last_sub:can_expand_with(sub) then
+            last_sub:expand_end_time(sub)
+            return true
         end
         table.insert(subs_list, (#subs_list - #n_latest_subs) + h.find_insertion_point(n_latest_subs, sub), sub)
         return true
     end
-    local get_subs_list = function()
+    --- Return a detached list of the collected subtitle objects.
+    function public.get_subs_list()
+        -- Return a shallow copy so callers can't mutate the internal list.
         local copy = {}
         for key, value in pairs(subs_list) do
             copy[key] = value
         end
         return copy
     end
-    return {
-        get_subs_list = get_subs_list,
-        get_time = get_time,
-        get_text = get_text,
-        get_n_text = get_n_text,
-        insert = insert,
-        is_empty = function()
-            return h.is_empty(subs_list)
-        end,
-    }
+    --- Report whether any subtitles have been collected.
+    function public.is_empty()
+        return h.is_empty(subs_list)
+    end
+
+    return public
 end
 
 return {
-    new = new_sub_list,
+    new = make_sub_list,
+    overlaps_enough = overlaps_enough,
 }

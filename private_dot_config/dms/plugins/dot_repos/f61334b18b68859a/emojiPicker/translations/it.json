@@ -1,0 +1,221 @@
+{
+  "Activities": {
+    "Activities": "Attività"
+  },
+  "Animals & Nature": {
+    "Animals & Nature": "Animali e natura"
+  },
+  "Appearance": {
+    "Appearance": "Aspetto"
+  },
+  "Auto": {
+    "Auto": "Auto"
+  },
+  "Choose the modal size that best fits your display.": {
+    "Choose the modal size that best fits your display.": "Scegli la dimensione modale che meglio si adatta al tuo display."
+  },
+  "Clear": {
+    "Clear": ""
+  },
+  "Clear All": {
+    "Clear All": "Cancella tutto"
+  },
+  "Clear History": {
+    "Clear History": "Cancella cronologia"
+  },
+  "Clear Recent History": {
+    "Clear Recent History": "Cancella cronologia recente"
+  },
+  "Close": {
+    "Close": "Vicino"
+  },
+  "Close Picker": {
+    "Close Picker": "Chiudi selettore"
+  },
+  "Comfortable (560 px)": {
+    "Comfortable (560 px)": "Confortevole (560 px)"
+  },
+  "Compact (500 px)": {
+    "Compact (500 px)": "Compatto (500px)"
+  },
+  "Copied %1 to clipboard": {
+    "Copied %1 to clipboard": "Copiato %1 negli appunti"
+  },
+  "Copy": {
+    "Copy": "Copia"
+  },
+  "Copy Confirmation": {
+    "Copy Confirmation": "Conferma di copia"
+  },
+  "Copy to clipboard": {
+    "Copy to clipboard": ""
+  },
+  "Credits": {
+    "Credits": ""
+  },
+  "Dark": {
+    "Dark": ""
+  },
+  "Default": {
+    "Default": ""
+  },
+  "Default Action": {
+    "Default Action": ""
+  },
+  "Default Category": {
+    "Default Category": "Categoria predefinita"
+  },
+  "Default skin tone modifier for people and hand emojis.": {
+    "Default skin tone modifier for people and hand emojis.": ""
+  },
+  "Emoji catalog and inspiration.": {
+    "Emoji catalog and inspiration.": ""
+  },
+  "Emoji metadata.": {
+    "Emoji metadata.": ""
+  },
+  "Emojis Per Row": {
+    "Emojis Per Row": ""
+  },
+  "Failed to copy emoji": {
+    "Failed to copy emoji": "Impossibile copiare l'emoji"
+  },
+  "Feedback": {
+    "Feedback": "Feedback"
+  },
+  "Flags": {
+    "Flags": "Bandiere"
+  },
+  "Food & Drink": {
+    "Food & Drink": "Cibo e bevande"
+  },
+  "General": {
+    "General": "Generale"
+  },
+  "Hold <b>Shift</b> while left-clicking or pressing <b>Enter</b> to add emojis to a queue.": {
+    "Hold <b>Shift</b> while left-clicking or pressing <b>Enter</b> to add emojis to a queue.": "Tieni premuto <b>Maiusc</b> mentre fai clic con il pulsante sinistro del mouse o premi <b>Invio</b> per aggiungere emoji a una coda."
+  },
+  "IPC Commands": {
+    "IPC Commands": "Comandi IPC"
+  },
+  "In the grid, press <b>Backspace</b> or <b>Delete</b> with an empty queue to clear the search and return to it.": {
+    "In the grid, press <b>Backspace</b> or <b>Delete</b> with an empty queue to clear the search and return to it.": ""
+  },
+  "In the grid, use <b>Ctrl+H/J/K/L</b> for Vim-style left/down/up/right navigation.": {
+    "In the grid, use <b>Ctrl+H/J/K/L</b> for Vim-style left/down/up/right navigation.": ""
+  },
+  "Keyboard Hints": {
+    "Keyboard Hints": ""
+  },
+  "Large (620 px)": {
+    "Large (620 px)": "Grande (620px)"
+  },
+  "Left click and Enter use this action; right click and Ctrl+Enter use the other one.": {
+    "Left click and Enter use this action; right click and Ctrl+Enter use the other one.": ""
+  },
+  "Light": {
+    "Light": ""
+  },
+  "Medium": {
+    "Medium": ""
+  },
+  "Medium-Dark": {
+    "Medium-Dark": ""
+  },
+  "Medium-Light": {
+    "Medium-Light": ""
+  },
+  "No emoji found": {
+    "No emoji found": "Nessuna emoji trovata"
+  },
+  "Number of emojis displayed per row. Each emoji stays square.": {
+    "Number of emojis displayed per row. Each emoji stays square.": ""
+  },
+  "Objects": {
+    "Objects": "Oggetti"
+  },
+  "Open Picker": {
+    "Open Picker": "Apri selettore"
+  },
+  "Paste": {
+    "Paste": "Impasto"
+  },
+  "Paste at cursor": {
+    "Paste at cursor": ""
+  },
+  "Picker Size": {
+    "Picker Size": "Dimensione del selettore"
+  },
+  "Press <b>Backspace</b> to remove the last queued emoji.": {
+    "Press <b>Backspace</b> to remove the last queued emoji.": "Premi <b>Backspace</b> per rimuovere l'ultima emoji in coda."
+  },
+  "Press <b>Down</b> or <b>Tab</b> to move from search to the first emoji.": {
+    "Press <b>Down</b> or <b>Tab</b> to move from search to the first emoji.": ""
+  },
+  "Press <b>Escape</b> to discard the queue, or close the picker when the queue is empty.": {
+    "Press <b>Escape</b> to discard the queue, or close the picker when the queue is empty.": "Premi <b>Esc</b> per eliminare la coda o chiudi il selettore quando la coda è vuota."
+  },
+  "Queue": {
+    "Queue": ""
+  },
+  "Recent History": {
+    "Recent History": "Storia recente"
+  },
+  "Recent History Size": {
+    "Recent History Size": "Dimensioni della cronologia recente"
+  },
+  "Recent emoji history cleared": {
+    "Recent emoji history cleared": "La cronologia recente delle emoji è stata cancellata"
+  },
+  "Recently Used": {
+    "Recently Used": "Usato di recente"
+  },
+  "Remove": {
+    "Remove": ""
+  },
+  "Search emoji": {
+    "Search emoji": "Cerca emoji"
+  },
+  "Search in %1": {
+    "Search in %1": ""
+  },
+  "Search results": {
+    "Search results": "Risultati della ricerca"
+  },
+  "Show a toast containing the emoji after copying it.": {
+    "Show a toast containing the emoji after copying it.": "Mostra un brindisi contenente l'emoji dopo averlo copiato."
+  },
+  "Show keyboard navigation hints at the bottom of the picker.": {
+    "Show keyboard navigation hints at the bottom of the picker.": ""
+  },
+  "Skin Tone": {
+    "Skin Tone": ""
+  },
+  "Smileys & People": {
+    "Smileys & People": "Faccine e persone"
+  },
+  "Symbols": {
+    "Symbols": "Simboli"
+  },
+  "Toggle Picker": {
+    "Toggle Picker": "Attiva/disattiva il selettore"
+  },
+  "Travel & Places": {
+    "Travel & Places": "Viaggi e luoghi"
+  },
+  "Usage Guide": {
+    "Usage Guide": "Guida all'uso"
+  },
+  "With an empty queue, <b>left-click</b> or <b>Enter</b> copies the selected emoji.": {
+    "With an empty queue, <b>left-click</b> or <b>Enter</b> copies the selected emoji.": "Con una coda vuota, <b>fai clic con il pulsante sinistro del mouse</b> o <b>Invio</b> copia l'emoji selezionata."
+  },
+  "With an empty queue, <b>right-click</b> or <b>Ctrl+Enter</b> copies and pastes the selected emoji.": {
+    "With an empty queue, <b>right-click</b> or <b>Ctrl+Enter</b> copies and pastes the selected emoji.": "Con una coda vuota, <b>fai clic con il pulsante destro del mouse</b> o <b>Ctrl+Invio</b> copia e incolla l'emoji selezionata."
+  },
+  "With emojis queued, <b>Enter</b> copies the sequence and <b>Ctrl+Enter</b> pastes it.": {
+    "With emojis queued, <b>Enter</b> copies the sequence and <b>Ctrl+Enter</b> pastes it.": "Con gli emoji in coda, <b>Invio</b> copia la sequenza e <b>Ctrl+Invio</b> la incolla."
+  },
+  "nav": {
+    "nav": ""
+  }
+}

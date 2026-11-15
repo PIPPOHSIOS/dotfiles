@@ -1,9 +1,15 @@
-// DMS Window Rules - Managed by DankMaterialShell
+// DMS Window Rules - Managed by Dux Shell
 // Do not edit manually - changes may be overwritten
+
+// @id=wr_1793793628551272855 @name=librewolf
+window-rule {
+    match app-id="^librewolf$"
+    open-maximized-to-edges true
+}
 
 // @id=dms-floating-windows @name=DMS Floating Windows
 window-rule {
-    match app-id="^com.danklinux.dms$"
+    match app-id="^(dev\\.duxlabs\\.shell|com\\.danklinux\\.dms)$"
     open-floating true
 }
 
@@ -15,12 +21,14 @@ window-rule {
     }
 }
 
-// @id=wr_1789236382606717832 @name=PCManFM-Qt
+// @id=wr_1789399415796898898 @name=org.kde.dolphin
 window-rule {
-    match app-id="^pcmanfm-qt$"
+    match app-id="^org.kde.dolphin$"
     opacity 0.90
+    open-floating true
     background-effect {
         blur true
+        xray false
     }
 }
 
@@ -51,11 +59,28 @@ window-rule {
     open-floating true
 }
 
-// @id=wr_1789399415796898898 @name=org.kde.dolphin
+// @id=wr_1791021359159618164 @name=com.gabm.satty
 window-rule {
-    match app-id="^org.kde.dolphin$"
-    opacity 0.90
-    background-effect {
-        blur true
-    }
+    match app-id="^com.gabm.satty$"
+    open-floating true
+    default-column-width { fixed 1280; }
+    default-window-height { fixed 720; }
+}
+
+// @id=wr_1791022747093282448 @name=org.kde.ark
+window-rule {
+    match app-id="^org.kde.ark$"
+    open-floating true
+}
+
+// @id=wr_1791106344053985962 @name=MATLAB R2026b
+window-rule {
+    match app-id="^MATLAB R2026b$" title="(Figures|Scope|Block Parameters|Configuration Parameters|Create New Data)"
+    open-floating true
+}
+
+// @id=dms-window-opaque @name=DMS Window Opaque
+window-rule {
+    match app-id="^(dev\\.duxlabs\\.shell|com\\.danklinux\\.dms)$"
+    opacity 1.00
 }
