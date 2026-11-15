@@ -1,0 +1,19 @@
+{
+  "dmsThemeSync": {
+    "enabled": true,
+    "folderColorBaseThemeDark": "Papirus-Dark",
+    "folderColorBaseThemeLight": "",
+    "folderColorBaseTheme": "",
+    "gtkThemeDark": "adw-gtk3-dark",
+    "gtkThemeLight": "adw-gtk3",
+    "uniformListBg": true,
+    "qtStyle": "Breeze",
+    "syncFolderColor": true,
+    "regularFontSize": 10,
+    "monoFontSize": 10,
+    "documentFontSize": 10
+  },
+  "quickCapture": {
+    "enabled": true
+  }
+}
